@@ -1,3 +1,4 @@
+
 package org.onebeartoe.games.press.your.button.tabs;
 
 import java.applet.Applet;
@@ -39,7 +40,8 @@ import org.onebeartoe.games.press.your.button.plugins.swing.SingleThreadedGamePa
  * point panel the points are added the users score. Landing on a whammy will
  * zero out their score.
  */
-public class PressYourButton extends SingleThreadedGamePanel {
+public class PressYourButton extends SingleThreadedGamePanel 
+{
 
     private ActionListener worker = new PressYourButtonWorker(this);
     private Thread bigButtonThread;
@@ -59,12 +61,18 @@ public class PressYourButton extends SingleThreadedGamePanel {
     public static final int boardWidth = 512;
 //    public static final int boardWidth = 256;
 //    public static final int boardWidth = 128;
+    
     public static final int scaleFactor = 1;
 //    public static final int scaledSize = boardWidth * scaleFactor;  
 //    public static final int gamePanelWidth = scaledSize / 3;
-    public static final int gamePanelWidth = boardWidth / 3;
+    
+    
+    public static final int columnCount = 5;
+    
+    public static final int gamePanelWidth = boardWidth / columnCount;
 
-    public PressYourButton() {
+    public PressYourButton() 
+    {
 
 
         worker = new PressYourButtonWorker(this);
@@ -159,27 +167,24 @@ public class PressYourButton extends SingleThreadedGamePanel {
     /**
      * draw method for a new game
      */
-    public void newGameConfiguration() {
+    public void newGameConfiguration() 
+    {
         timer.setDelay(1900);  // milliseconds 
     }
 
     /**
      * this animates the moving point panels and a selected panel
      */
-    public void drawBoardForPlayersTurn() {
+    public void drawBoardForPlayersTurn() 
+    {
         timer.setDelay(690);  // milliseconds 
 
         BufferedImage img = new BufferedImage(boardWidth, boardWidth, BufferedImage.TYPE_INT_ARGB);
 
-//	int boardWidth = gameBoardPanel.borardDimension.width;
-//	int boardHeight = gameBoardPanel.borardDimension.height;	
-//	BufferedImage img = new BufferedImage(boardWidth, boardHeight, BufferedImage.TYPE_INT_ARGB);	    
-
         Graphics2D g2d = img.createGraphics();
 
-        g2d.setPaint(Color.BLACK);
+        g2d.setPaint(Color.DARK_GRAY);
         g2d.fillRect(0, 0, boardWidth, boardWidth);
-//	g2d.fillRect(0,0, boardWidth, boardHeight);
 
         Color textColor = Color.GREEN;
         g2d.setPaint(textColor);
@@ -193,7 +198,8 @@ public class PressYourButton extends SingleThreadedGamePanel {
 
         int i = 0;
         Collections.shuffle(boardPanels);
-        for (Point location : boardPanelLocations) {
+        for (Point location : boardPanelLocations) 
+        {
             BoardPanel panel = boardPanels.get(i);
 
             Color foreground;
@@ -215,37 +221,57 @@ public class PressYourButton extends SingleThreadedGamePanel {
         Point labelLocation = new Point(gamePanelWidth, gamePanelWidth);
         String label = "P" + (currentGame.currentPlayer + 1);
         BoardPanel playerLabel = new PlayerLabelPanel(label);
+// temporarily don't show the user       
         playerLabel.draw(g2d, labelLocation, Color.RED);
 
         g2d.dispose();
 
         gameBoardPanel.setImage(img);
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        SwingUtilities.invokeLater(new Runnable() 
+        {
+            public void run() 
+            {
                 gameBoardPanel.invalidate();
                 gameBoardPanel.updateUI();
             }
         });
     }
 
-    private void setupBoardPanelLocations() {
+    /**
+     * currently 5 by 5, with a 3x3 center setup is used.
+     */
+    private void setupBoardPanelLocations() 
+    {
         boardPanelLocations = new ArrayList();
 
         // top row
         Point p1 = new Point(0, 0);
         Point p2 = new Point(gamePanelWidth, 0);
         Point p3 = new Point(gamePanelWidth * 2, 0);
+        Point p4 = new Point(gamePanelWidth * 3, 0);
+        Point p5 = new Point(gamePanelWidth * 4, 0);
 
-        // middle row
-        Point p4 = new Point(0, gamePanelWidth);
-        Point p5 = new Point(gamePanelWidth * 2, gamePanelWidth);
+        // second row
+        Point p6 = new Point(0, gamePanelWidth);
+        Point p7 = new Point(gamePanelWidth * 4, gamePanelWidth);
 
+        // third row
+        Point p8 = new Point(0, gamePanelWidth * 2);
+        Point p9 = new Point(gamePanelWidth * 4, gamePanelWidth * 2);
+        
+        // fourth row
+        Point p10 = new Point(0, gamePanelWidth * 3);
+        Point p11 = new Point(gamePanelWidth * 4, gamePanelWidth * 3);
+        
         // bottom row
-        Point p6 = new Point(0, gamePanelWidth * 2);
-        Point p7 = new Point(gamePanelWidth, gamePanelWidth * 2);
-        Point p8 = new Point(gamePanelWidth * 2, gamePanelWidth * 2);
+        Point p12 = new Point(0, gamePanelWidth * 4);
+        Point p13 = new Point(gamePanelWidth, gamePanelWidth * 4);
+        Point p14 = new Point(gamePanelWidth * 2, gamePanelWidth * 4);
+        Point p15 = new Point(gamePanelWidth * 3, gamePanelWidth * 4);
+        Point p16 = new Point(gamePanelWidth *4, gamePanelWidth * 4);
 
+        // first row
         boardPanelLocations.add(p1);
         boardPanelLocations.add(p2);
         boardPanelLocations.add(p3);
@@ -253,10 +279,25 @@ public class PressYourButton extends SingleThreadedGamePanel {
         boardPanelLocations.add(p5);
         boardPanelLocations.add(p6);
         boardPanelLocations.add(p7);
-        boardPanelLocations.add(p8);
+        
+        // second row
+        boardPanelLocations.add(p8);        
+        boardPanelLocations.add(p9);
+        
+        // third row
+        boardPanelLocations.add(p10);
+        boardPanelLocations.add(p11);
+        
+        // bottom row
+        boardPanelLocations.add(p12);
+        boardPanelLocations.add(p13);
+        boardPanelLocations.add(p14);
+        boardPanelLocations.add(p15);
+        boardPanelLocations.add(p16);
     }
 
-    private BufferedImage drawScoreBoard() {
+    private BufferedImage drawScoreBoard() 
+    {
         int width = 128;
         int height = 128;
 
@@ -264,6 +305,7 @@ public class PressYourButton extends SingleThreadedGamePanel {
 
         Graphics2D g2d = img.createGraphics();
 
+        
         g2d.setPaint(Color.BLACK);
         g2d.fillRect(0, 0, width, height);
 
@@ -304,7 +346,8 @@ public class PressYourButton extends SingleThreadedGamePanel {
         timer.setDelay(5000);  // milliseconds 	
     }
 
-    private void setupBoardPanels() {
+    private void setupBoardPanels() 
+    {
         BoardPanel p1 = new PointPanel(Color.YELLOW, 10);
         BoardPanel p2 = new PointPanel(Color.BLUE, 20);
         BoardPanel p3 = new PointPanel(Color.GREEN, 30);
@@ -316,7 +359,18 @@ public class PressYourButton extends SingleThreadedGamePanel {
         BoardPanel p9 = new PointPanel(Color.PINK, 90);
         BoardPanel p10 = new PointPanel(Color.YELLOW, 10);
         BoardPanel p11 = new PointPanel(Color.orange, 20);
-        BoardPanel p12 = new PointPanel(Color.BLUE, 30);
+        BoardPanel p12 = new PointPanel(Color.BLUE, 30); 
+        
+        BoardPanel p13 = new PointPanel(Color.GREEN, 30);
+        BoardPanel p14 = new PointPanel(Color.LIGHT_GRAY, 40);
+        BoardPanel p15 = new PointPanel(Color.CYAN, 50);
+        BoardPanel p16 = new PointPanel(Color.DARK_GRAY, 60);
+        BoardPanel p17 = new PointPanel(Color.MAGENTA, 70);
+        BoardPanel p18 = new PointPanel(Color.ORANGE, 80);
+        BoardPanel p19 = new PointPanel(Color.PINK, 90);
+        BoardPanel p20 = new PointPanel(Color.YELLOW, 10);
+        BoardPanel p21 = new PointPanel(Color.orange, 20);
+        BoardPanel p22 = new PointPanel(Color.BLUE, 30);
 
         BoardPanel w1 = new WhammyPanel();
         BoardPanel w2 = new WhammyPanel();
@@ -336,6 +390,16 @@ public class PressYourButton extends SingleThreadedGamePanel {
         boardPanels.add(p10);
         boardPanels.add(p11);
         boardPanels.add(p12);
+        boardPanels.add(p13);
+        boardPanels.add(p14);
+        boardPanels.add(p15);
+        boardPanels.add(p16);
+        boardPanels.add(p17);
+        boardPanels.add(p18);
+        boardPanels.add(p19);
+        boardPanels.add(p20);
+        boardPanels.add(p21);
+        boardPanels.add(p22);
 
         boardPanels.add(w1);
         boardPanels.add(w2);
@@ -400,8 +464,10 @@ public class PressYourButton extends SingleThreadedGamePanel {
         }
     }
 
-    public void updateScoreBoardPane() {
-        SwingUtilities.invokeLater(new Runnable() {
+    public void updateScoreBoardPane() 
+    {
+        SwingUtilities.invokeLater(new Runnable() 
+        {
             public void run() {
                 System.out.println("updating the score board pane");
                 scoreBoardPanel.invalidate();

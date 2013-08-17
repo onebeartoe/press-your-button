@@ -104,7 +104,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	}
         
 	// game tab
-	String path2 = "/tab_icons/ship_small.png";
+	String path2 = "/icons/tabs/game.png";
 	URL url2 = getClass().getResource(path2);
 	ImageIcon animationsTabIcon = new ImageIcon(url2);
 	final GamePanel animationsPanel = new PressYourButton();
@@ -114,7 +114,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	JPanel statusPanel = new JPanel();
 	statusPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
 	statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
-	statusLabel = new JLabel("Game Status: launching...");
+	statusLabel = new JLabel("Game Status: Running");
 	statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
 	statusPanel.add(statusLabel);
 	
@@ -123,7 +123,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	tabbedPane = new JTabbedPane();
 	tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         tabbedPane.addChangeListener( new TabChangeListener() );
-        tabbedPane.addTab("Animations", animationsTabIcon, animationsPanel, "Load built-in animations.");
+        tabbedPane.addTab("Pres Your Button", animationsTabIcon, animationsPanel, "Load built-in animations.");
 	
 	Dimension demension;
 	try 
@@ -374,8 +374,8 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-	    String path = "/images/";
-	    String iconPath = path + "aaagumball.png";
+	    String path = "/icons/tabs/";
+	    String iconPath = path + "game.png";
 	    URL resource = getClass().getResource(iconPath);
 	    ImageIcon imageIcon = new ImageIcon(resource);
 	    String message = "About Press Your Button";
