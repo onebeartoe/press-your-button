@@ -51,7 +51,7 @@
 		<version>1.3</version>
 		<configuration>
 
-		    <mainClass>com.ledpressyourluckart.pcpressyourluckart.pressyourluckAnimationsPC</mainClass>
+		    <mainClass>org.onebeartoe.games.press.your.button.App</mainClass>
 
 		    <!-- only required if signing the jar file -->
 		    <keyStoreAlias>example-user</keyStoreAlias>
@@ -68,7 +68,7 @@
 		<configuration>
 		    <archive>
 			<manifest>
-			    <mainClass>com.ledpressyourluckart.pc.pressyourluckApp</mainClass>
+			    <mainClass>org.onebeartoe.games.press.your.button.App</mainClass>
 			</manifest>
 		    </archive>
 		    <descriptorRefs>
@@ -100,7 +100,7 @@
 			<manifest>
 			    <addClasspath>true</addClasspath>
 			    <classpathPrefix>lib/</classpathPrefix>
-			    <mainClass>com.ledpressyourluckart.pc.pressyourluckApp</mainClass>
+			    <mainClass>org.onebeartoe.games.press.your.button.App</mainClass>
 			</manifest>
 		    </archive>
 		</configuration>
