@@ -192,8 +192,6 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	URL userUrl = getClass().getResource(userIconPath);
 	ImageIcon userTabIcon = new ImageIcon(userUrl);	
 	String key = GamePreferencesKeys.userImagesDirectory;	
-	String defaultValue = System.getProperty("user.home");
-	String localUserPath = preferenceService.get(key, defaultValue);
 
 	// animations tab
 	String path2 = "/tab_icons/ship_small.png";
