@@ -183,7 +183,7 @@ public class PressYourButton extends SingleThreadedGamePanel
 
         Graphics2D g2d = img.createGraphics();
 
-        g2d.setPaint(Color.DARK_GRAY);
+        g2d.setPaint(Color.LIGHT_GRAY);
         g2d.fillRect(0, 0, boardWidth, boardWidth);
 
         Color textColor = Color.GREEN;
