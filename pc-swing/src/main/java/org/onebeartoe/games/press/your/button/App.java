@@ -279,7 +279,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	menuItem.getAccessibleContext().setAccessibleDescription("update with accessible description");
 	helpMenu.add(menuItem);
 
-	menuItem = new JMenuItem(new ImageIcon("images/middle.gif"));
+	menuItem = new JMenuItem();
 	menuItem.setMnemonic(KeyEvent.VK_D);
 	helpMenu.add(menuItem);
 	
