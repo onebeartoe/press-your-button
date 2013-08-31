@@ -142,6 +142,9 @@ public class PressYourButton extends SingleThreadedGamePanel
         boardSound = Applet.newAudioClip(url);
 
         path = "stop_at_a_whammy.wav";
+        
+        // http://www.zedge.net/ringtones/0-1-1-press%20your%20luck/
+        path = "whammy.wav";
         url = getClass().getResource(path);
         whammySound = Applet.newAudioClip(url);
 
