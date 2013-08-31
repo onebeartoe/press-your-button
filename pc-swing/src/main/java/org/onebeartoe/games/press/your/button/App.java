@@ -71,7 +71,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
     
     private JTabbedPane tabbedPane;
     
-    private JFileChooser pluginChooser;
+//    private JFileChooser pluginChooser;
     
     private JLabel statusLabel;
     
@@ -84,8 +84,8 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	String className = App.class.getName();
 	logger = Logger.getLogger(className);
 	
-	pluginChooser = new JFileChooser();
-	pluginChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+//	pluginChooser = new JFileChooser();
+//	pluginChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 	
 	preferenceService = new JavaPreferencesService();
 
@@ -284,7 +284,6 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	helpMenu.add(menuItem);
 	
 	JMenuItem loadPluginsOption = new JMenuItem("Load");
-	loadPluginsOption.addActionListener( new LoadPluginListener() );
 	JMenuItem clearPluginsOption = new JMenuItem("Clear");
 	clearPluginsOption.addActionListener( new ClearPluginsListener() );
 	JMenu pluginsMenu = new JMenu("Plugins");
@@ -384,80 +383,6 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	    InstructionsPanel about = new InstructionsPanel();
 	    JOptionPane.showMessageDialog(frame, about, message, JOptionPane.INFORMATION_MESSAGE, imageIcon);
 	}
-    }
-    
-    private class LoadPluginListener implements ActionListener
-    {
-	@Override
-	public void actionPerformed(ActionEvent e) 
-	{
-	    int result = pluginChooser.showDialog(frame, "Select");
-	    if(result == JFileChooser.APPROVE_OPTION)
-	    {
-		File jar = pluginChooser.getSelectedFile();
-		
-		String path = jar.getAbsolutePath();
-			
-		try 
-		{
-		    List<String> classNames = loadPluginNames(jar);
-		    for(String qualifiedClassName : classNames)
-		    {
-			GamePanel plugin;
-			try 
-			{
-			    plugin = preferenceService.loadPlugin(path, qualifiedClassName);
-	
-			    displayPlugin(plugin);
-                            
-                            PluginConfigEntry entry = new PluginConfigEntry();
-                            entry.jarPath = path;
-                            entry.qualifiedClassName = qualifiedClassName;
-                            userPluginConfiguration.add(entry);			    			    
-                            
-                            preferenceService.saveUserPluginPreferences(userPluginConfiguration);
-			} 
-			catch (Exception ex) 
-			{
-			    String message = "A problem occured while loading plugin: " + qualifiedClassName;
-			    logger.log(Level.SEVERE, message, ex);
-			}
-		    }
-		} 
-		catch (Exception ex) 
-		{
-		    String message = "A problem occured while loading plugin class names.";
-		    logger.log(Level.SEVERE, message, ex);
-		}
-	    }
-	}
-	
-	private List<String> loadPluginNames(File jarfile) throws Exception
-	{
-	    List<String> classNames = new ArrayList();
-	    	    
-	    ZipFile zipfile = new ZipFile(jarfile);
-	    
-	    String entryPath = "plugins.manifest";
-	    ZipEntry entry = zipfile.getEntry(entryPath);
-	    InputStream inputStream = zipfile.getInputStream(entry);
-	    
-	    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-	    String line = br.readLine();  	
-	    while (line != null)
-	    {
-		if( !line.trim().equals("") )
-		{
-		    classNames.add(line);
-		}
-		
-		line = br.readLine();
-	    }	
-	    inputStream.close(); 		
-	    
-	    return classNames;
-	}
-	
     }
     
     private class QuitListener implements ActionListener
