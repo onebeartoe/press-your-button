@@ -90,9 +90,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	preferenceService = new JavaPreferencesService();
 
         userPluginConfiguration = new ArrayList();
-        
-
-        
+           
         try 
 	{
 	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -143,9 +141,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	catch (Exception ex) 
 	{
 	    logger.log(Level.INFO, ex.getMessage(), ex);
-	}
-        
-    
+	}    
 	
 	frame.addWindowListener(this);
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
@@ -164,17 +160,10 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	{
 	    frame.setLocation(location);
 	}
-
-       
-//	startSearchTimer();
-	
                 
 	frame.setVisible(true);
-	
-	
     }
 
-//    @Override
     protected Window createMainWindow(String args[]) 
     {
 	try 
@@ -244,6 +233,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	frame.add(tabbedPane, BorderLayout.CENTER);	
 	frame.add(statusPanel, BorderLayout.SOUTH);
 	frame.setSize(demension);		
+        frame.setTitle("onebeartoe Press Your Button");
 		
 	if(location == null)
 	{
@@ -254,10 +244,6 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	{
 	    frame.setLocation(location);
 	}
-
-       
-//	startSearchTimer();
-	
                 
 	frame.setVisible(true);
 	
@@ -322,9 +308,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
     }
     
     private void exit()
-    {
-//	searchTimer.stop();
-	
+    {	
 	savePreferences();
 	
 	System.exit(0);
@@ -338,14 +322,10 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 
 	return (data.getData());
     }    
-
- 
-  
     
     public static void main(String[] args) throws Exception 
     {		
 	App app = new App();
-//	app.go(args);		
     }
     
     private void savePreferences()
@@ -389,8 +369,6 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	{
             userPluginConfiguration.clear();
 	    preferenceService.saveUserPluginPreferences(userPluginConfiguration);
-	    
-	
 	}
     }
     
