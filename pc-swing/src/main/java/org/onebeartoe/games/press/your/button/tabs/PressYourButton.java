@@ -451,7 +451,7 @@ public class PressYourButton extends SingleThreadedGamePanel
 
             winnerSound.loop();
 
-            String message = "Player " + (currentGame.currentPlayer + 1) + " is the of this game!";
+            String message = "Player " + (currentGame.currentPlayer + 1) + " is the winner of this game!";
             JOptionPane.showMessageDialog(this, message);
         } else {
             gameState = GameStates.END_OF_TURN;
