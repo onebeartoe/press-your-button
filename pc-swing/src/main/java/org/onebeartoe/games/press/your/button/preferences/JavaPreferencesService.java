@@ -8,18 +8,14 @@ import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.prefs.Preferences;
 import javax.swing.JFrame;
-import org.onebeartoe.games.press.your.button.App;
 import org.onebeartoe.games.press.your.button.plugins.PluginConfigEntry;
 import org.onebeartoe.games.press.your.button.swing.GamePanel;
 
 /**
- * @author rmarquez
+ * @deprecated Use the version at https://github.com/onebeartoe/java-libraries/tree/master/onebeartoe-application/src/main/java/org/onebeartoe/application
+ * @author Roberto Marquez
  */
 public class JavaPreferencesService implements PreferencesService
 {
