@@ -59,22 +59,15 @@ public class PressYourButton extends SingleThreadedGamePanel
     public AudioClip whammySound;
     public AudioClip winnerSound;
     public static final int boardWidth = 512;
-//    public static final int boardWidth = 256;
-//    public static final int boardWidth = 128;
     
     public static final int scaleFactor = 1;
-//    public static final int scaledSize = boardWidth * scaleFactor;  
-//    public static final int gamePanelWidth = scaledSize / 3;
-    
     
     public static final int columnCount = 5;
     
-    public static final int gamePanelWidth = boardWidth / columnCount;
+    public final int gamePanelWidth = boardWidth / columnCount;
 
     public PressYourButton() 
     {
-
-
         worker = new PressYourButtonWorker(this);
 
         gameState = GameStates.NEW_GAME_CONFIG;
@@ -213,7 +206,7 @@ public class PressYourButton extends SingleThreadedGamePanel
                 foreground = Color.WHITE;
             }
 
-            panel.draw(g2d, location, foreground);
+            panel.draw(g2d, location, foreground, gamePanelWidth);
 
             System.out.println("Location " + i + " at " + location.x + ", " + location.y);
 
@@ -225,7 +218,7 @@ public class PressYourButton extends SingleThreadedGamePanel
         String label = "P" + (currentGame.currentPlayer + 1);
         BoardPanel playerLabel = new PlayerLabelPanel(label);
 // temporarily don't show the user       
-        playerLabel.draw(g2d, labelLocation, Color.RED);
+        playerLabel.draw(g2d, labelLocation, Color.RED, gamePanelWidth);
 
         g2d.dispose();
 

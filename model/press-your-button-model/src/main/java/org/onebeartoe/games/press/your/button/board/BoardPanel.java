@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
+//import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
 
 public abstract class BoardPanel
 {
@@ -26,10 +26,14 @@ public abstract class BoardPanel
 	font = new Font(fontFamily, Font.PLAIN, 32);
     }
 
-    public void draw(Graphics2D g2d, Point location, Color foreground)
+    
+    public void draw(Graphics2D g2d, Point location, Color foreground, int gamePanelWidth)
     {
 	g2d.setColor(backgroundColor);
-	g2d.fillRect(location.x, location.y, PressYourButton.gamePanelWidth, PressYourButton.gamePanelWidth);	
+        
+	g2d.fillRect(location.x, location.y, gamePanelWidth, gamePanelWidth);
+//        g2d.fillRect(location.x, location.y, PressYourButton.gamePanelWidth, PressYourButton.gamePanelWidth);
+        
 	g2d.setColor(foreground);
 
 	String text = getLabel();

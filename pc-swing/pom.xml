@@ -27,21 +27,7 @@
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<slf4j.version>1.6.1</slf4j.version>
     </properties>
-    
-    <!--repositories>
-	<repository>
-	    <releases>
-		<enabled>true</enabled>
-		<updatePolicy>always</updatePolicy>
-		<checksumPolicy>warn</checksumPolicy>
-	    </releases>
-	    <id>clapper-org-maven-repo</id>
-	    <name>org.clapper Maven Repo</name>
-	    <url>http://maven.clapper.org/</url>
-	    <layout>default</layout>
-	</repository>
-    </repositories-->
-    
+
     <build>
 	<plugins>
 
@@ -109,8 +95,7 @@
 	</plugins>
     </build>
     
-    <dependencies>   
-
+    <dependencies>
 	<dependency>
 	    <groupId>junit</groupId>
 	    <artifactId>junit</artifactId>
@@ -118,16 +103,10 @@
 	    <scope>test</scope>
 	</dependency>
 
-
-<!-- 
-
 	<dependency>
-	    <groupId>org.onebeartoe.pressyourluck.plugins</groupId>
-	    <artifactId>pressyourluck-plugin</artifactId>
-	    <version>0.1</version>
+            <groupId>org.onebeartoe.games</groupId>
+            <artifactId>press-your-button-model</artifactId>
+            <version>0.1-SNAPSHOT</version>
 	</dependency>                
-
-        -->        
     </dependencies>
-
 </project>
