@@ -1,14 +1,50 @@
 
 package org.onebeartoe.games.press.your.button;
 
+import java.util.List;
+
 /**
  * @author Roberto Marquez
  */
-public interface PressYourButtonGame 
+public class PressYourButtonGame 
 {
-    default NextPlayerResponses nextPlayer()
+    public volatile GameStates gameState = GameStates.NEW_GAME_CONFIG;
+
+    public List<Player> players;
+    
+    public volatile int currentPlayer;
+    
+    public int targetScore;
+    
+    public boolean targetReached()
     {
-        s
+	Player player = players.get(currentPlayer);
+	
+	boolean reached = player.score > targetScore;
+	
+	return reached;
+    }
+    
+    @Override
+    public String toString()
+    {
+	StringBuilder sb = new StringBuilder();
+	
+	sb.append("target score: " + targetScore + " - ");
+	sb.append("current player: " + currentPlayer + " - ");
+	
+	for(int i=0; i < players.size(); i++)    
+	{
+	    Player p = players.get(i);
+	    sb.append("P" + (i+1) + ": " + p.score + "\t");
+	}
+	
+	return sb.toString();
+    }    
+    
+    public NextPlayerResponses nextPlayer()
+    {
+        
         return null;
     }
 }

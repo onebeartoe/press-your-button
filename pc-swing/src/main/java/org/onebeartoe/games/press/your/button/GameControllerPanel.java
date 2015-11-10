@@ -18,13 +18,18 @@ import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
 /**
  * @author rmarquez
  */
-public class GameControlPanel extends JPanel
+public class GameControllerPanel extends JPanel
 {
-    private final PressYourButton plugin;
+    private final PressYourButtonGame game;
+    
+    private final PressYourButton app;
 
-    public GameControlPanel(final PressYourButton plugin, PreviewPanel gameBoardPanel, PreviewPanel scoreBoardPanel) 
+//    public GameControllerPanel(final PressYourButtonGame app, PreviewPanel gameBoardPanel, PreviewPanel scoreBoardPanel)
+    public GameControllerPanel(final PressYourButton app, PreviewPanel gameBoardPanel, PreviewPanel scoreBoardPanel, PressYourButtonGame game)
     {
-	this.plugin = plugin;
+	this.app = app;
+        
+        this.game = game;
 	
 	JButton stopButton = new JButton("Stop");
 	stopButton.addActionListener( new StopButtonListener() );	
@@ -62,30 +67,30 @@ public class GameControlPanel extends JPanel
     
     private void newGame()
     {
-	plugin.winnerSound.stop();
+	app.winnerSound.stop();
 		    
-	plugin.remove(plugin.endOfTurnPanel);
-	plugin.add(plugin.newGamePanel, BorderLayout.CENTER);
-	plugin.newGame();
-	plugin.gameState = GameStates.NEW_GAME_CONFIG;
+	app.remove(app.endOfTurnPanel);
+	app.add(app.newGamePanel, BorderLayout.CENTER);
+	app.newGame();
+	game.gameState = GameStates.NEW_GAME_CONFIG;
     }
     
     private class ShowScoreListener implements ActionListener
     {
 	public void actionPerformed(ActionEvent e) 
 	{
-	    if(plugin.gameState == GameStates.END_OF_TURN || 
-		    plugin.gameState == GameStates.SHOW_SCORE ||
-			plugin.gameState == GameStates.END_OF_GAME)
+	    if(game.gameState == GameStates.END_OF_TURN || 
+		    game.gameState == GameStates.SHOW_SCORE ||
+			game.gameState == GameStates.END_OF_GAME)
 	    {
-		plugin.switchToScoreView(true);
-		plugin.gameState = GameStates.SHOW_SCORE;
+		app.switchToScoreView(true);
+		game.gameState = GameStates.SHOW_SCORE;
 	    }
 	    else
 	    {
 		String message = "The score cannot be shown during a players turn.";
-		System.out.println(message + "  state: " + plugin.gameState);
-		JOptionPane.showMessageDialog(plugin, message);
+		System.out.println(message + "  state: " + game.gameState);
+		JOptionPane.showMessageDialog(app, message);
 	    }
 	}	
     }
@@ -94,20 +99,20 @@ public class GameControlPanel extends JPanel
     {
 	public void actionPerformed(ActionEvent e) 
 	{	    
-            System.out.println("in new game listener, game state is " + plugin.gameState);
+            System.out.println("in new game listener, game state is " + game.gameState);
 
-	    if(plugin.gameState == GameStates.PLAYERS_TURN ||
-		    plugin.gameState == GameStates.END_OF_TURN ||
-			plugin.gameState == GameStates.SHOW_SCORE)
+	    if(game.gameState == GameStates.PLAYERS_TURN ||
+		    game.gameState == GameStates.END_OF_TURN ||
+			game.gameState == GameStates.SHOW_SCORE)
 	    {
 		String message = "Are you sure you want to end the current game?";
-		int result = JOptionPane.showConfirmDialog(GameControlPanel.this, message);
+		int result = JOptionPane.showConfirmDialog(GameControllerPanel.this, message);
 		if(result == JOptionPane.OK_OPTION)
 		{
 		    newGame();		    
 		}
 	    }
-	    else if(plugin.gameState == GameStates.END_OF_GAME)
+	    else if(game.gameState == GameStates.END_OF_GAME)
 	    {
 		newGame();
 		
@@ -119,35 +124,34 @@ public class GameControlPanel extends JPanel
     {
 	public void actionPerformed(ActionEvent e) 
 	{
-            
-use NextPlayerResponses            
-//            pressYourButtonGame
-//move it            
-            System.out.println("in next listener, game state is " + plugin.gameState);	    
-	    if(plugin.gameState == GameStates.END_OF_GAME)
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            
+// use NextPlayerResponses                    
+            System.out.println("in next listener, game state is " + game.gameState);	    
+	    if(game.gameState == GameStates.END_OF_GAME)
 	    {
 		String message = "This game is over, please click the 'New Game' button.";
-		JOptionPane.showMessageDialog(GameControlPanel.this, message);
+		JOptionPane.showMessageDialog(GameControllerPanel.this, message);
 	    }
-	    else if(plugin.gameState == GameStates.PLAYERS_TURN)
+	    else if(game.gameState == GameStates.PLAYERS_TURN)
 	    {
 		String message = "The current player cannot be skipped.  Try the 'New Game' button, if you are done with is game.";
-		JOptionPane.showMessageDialog(GameControlPanel.this, message);
+		JOptionPane.showMessageDialog(GameControllerPanel.this, message);
 	    }
-	    else if(plugin.gameState == GameStates.END_OF_TURN ||
-                        (plugin.gameState == GameStates.SHOW_SCORE && !plugin.currentGame.targetReached() )
+	    else if(game.gameState == GameStates.END_OF_TURN ||
+                        (game.gameState == GameStates.SHOW_SCORE && !app.game.targetReached() )
 		    )
 	    {
-		plugin.currentGame.currentPlayer++;
+		app.game.currentPlayer++;
 		    
-		if(plugin.currentGame.currentPlayer == plugin.currentGame.players.size() )
+		if(app.game.currentPlayer == app.game.players.size() )
 		{
-		    plugin.currentGame.currentPlayer = 0;
+		    app.game.currentPlayer = 0;
 		}
 
-		plugin.gameState = GameStates.PLAYERS_TURN;
+		game.gameState = GameStates.PLAYERS_TURN;
 
-		plugin.boardSound.loop();
+		app.boardSound.loop();
 	    }	    
 	}	
     }
@@ -156,10 +160,15 @@ use NextPlayerResponses
     {
 	public void actionPerformed(ActionEvent e) 
 	{
-	    if(plugin.gameState == GameStates.PLAYERS_TURN)
+	    if(game.gameState == GameStates.PLAYERS_TURN)
 	    {
-		plugin.endCurrentPlayersTurn();
+                System.out.println("ending the curent players turn");
+		app.endCurrentPlayersTurn();
 	    }
+            else
+            {
+                System.out.println("not gonna stp player turn because we are in state: " + game.gameState);
+            }
 	}
     }
     

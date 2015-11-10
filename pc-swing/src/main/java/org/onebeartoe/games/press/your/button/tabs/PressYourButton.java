@@ -21,11 +21,11 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import org.onebeartoe.games.press.your.button.Game;
-import org.onebeartoe.games.press.your.button.GameControlPanel;
+import org.onebeartoe.games.press.your.button.GameControllerPanel;
 import org.onebeartoe.games.press.your.button.GameCreationPanel;
 import org.onebeartoe.games.press.your.button.GameStates;
 import org.onebeartoe.games.press.your.button.Player;
+import org.onebeartoe.games.press.your.button.PressYourButtonGame;
 import org.onebeartoe.games.press.your.button.board.BoardPanel;
 import org.onebeartoe.games.press.your.button.board.PlayerLabelPanel;
 import org.onebeartoe.games.press.your.button.board.PreviewPanel;
@@ -41,7 +41,7 @@ import org.onebeartoe.games.press.your.button.service.PressYourButtonService;
  */
 public class PressYourButton extends SingleThreadedGamePanel 
 {
-    private ActionListener worker = new PressYourButtonWorker(this);
+    private ActionListener worker;// = new PressYourButtonWorker(this);
     
     private Thread bigButtonThread;
     
@@ -55,13 +55,11 @@ public class PressYourButton extends SingleThreadedGamePanel
     
     private PreviewPanel scoreBoardPanel;
     
-    public GameControlPanel endOfTurnPanel;
+    public GameControllerPanel endOfTurnPanel;
     
     public GameCreationPanel newGamePanel;
     
-    volatile public GameStates gameState;
-    
-    volatile public Game currentGame;
+    volatile public PressYourButtonGame game;
     
     private Random locationRandom;
     
@@ -83,10 +81,11 @@ public class PressYourButton extends SingleThreadedGamePanel
 
     public PressYourButton() 
     {
-        worker = new PressYourButtonWorker(this);
+        game = new PressYourButtonGame(){};
+        game.gameState = GameStates.PLAYERS_TURN;
 
-        gameState = GameStates.NEW_GAME_CONFIG;
-
+        worker = new PressYourButtonWorker(this, game);
+        
         // use the default implementation of the service
         pressYourButtonService = new PressYourButtonService(){};        
         
@@ -100,7 +99,7 @@ public class PressYourButton extends SingleThreadedGamePanel
 
         setLayout(new BorderLayout());
 
-        newGamePanel = new GameCreationPanel(this);
+        newGamePanel = new GameCreationPanel(this, game);
 
         Dimension scoreBoardDimension = new Dimension(128, 128);
         scoreBoardPanel = new PreviewPanel(this, scoreBoardDimension);
@@ -110,7 +109,7 @@ public class PressYourButton extends SingleThreadedGamePanel
         gameBoardPanel = new PreviewPanel(this, boardDimension);
         gameBoardPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        endOfTurnPanel = new GameControlPanel(this, gameBoardPanel, scoreBoardPanel);
+        endOfTurnPanel = new GameControllerPanel(this, gameBoardPanel, scoreBoardPanel, game);
 
         add(newGamePanel, BorderLayout.CENTER);
     }
@@ -130,7 +129,8 @@ public class PressYourButton extends SingleThreadedGamePanel
     }
 
     @Override
-    public ActionListener getActionListener() {
+    public ActionListener getActionListener() 
+    {
         return worker;
     }
 
@@ -166,12 +166,12 @@ public class PressYourButton extends SingleThreadedGamePanel
         winnerSound = Applet.newAudioClip(url);
     }
 
-    public void newGame() {
+    public void newGame() 
+    {
         invalidate();
         updateUI();
 
-        Game game = newGamePanel.createNewGame();
-        currentGame = game;
+        newGamePanel.createNewGame();
 
         if (curentPointPanel != null) {
             curentPointPanel.amount = 0;
@@ -228,14 +228,14 @@ public class PressYourButton extends SingleThreadedGamePanel
 
             panel.draw(g2d, location, foreground, gamePanelWidth);
 
-            System.out.println("Location " + i + " at " + location.x + ", " + location.y);
+//            System.out.println("Location " + i + " at " + location.x + ", " + location.y);
 
             i++;
         }
-        System.out.println("i = " + i);
+//        System.out.println("i = " + i);
 
         Point labelLocation = new Point(gamePanelWidth, gamePanelWidth);
-        String label = "P" + (currentGame.currentPlayer + 1);
+        String label = "P" + (game.currentPlayer + 1);
         BoardPanel playerLabel = new PlayerLabelPanel(label);
 // temporarily don't show the user       
         playerLabel.draw(g2d, labelLocation, Color.RED, gamePanelWidth);
@@ -333,11 +333,11 @@ public class PressYourButton extends SingleThreadedGamePanel
 
         g2d.setFont(font);
 
-        System.out.println(currentGame.toString());
+        System.out.println(game.toString());
 
         int verticalGap = 40;
         int i = 0;
-        for (Player p : currentGame.players) {
+        for (Player p : game.players) {
             String s = "P" + (i + 1) + " " + p.score;
             int x = 5;
             int y = 30 + i * verticalGap;
@@ -368,12 +368,9 @@ public class PressYourButton extends SingleThreadedGamePanel
     }
 
     @Override
-    public void startTabActivity() {
+    public void startTabActivity() 
+    {
         super.startTabActivity();
-
-        // start big button listener
-
-
     }
 
     @Override
@@ -389,36 +386,46 @@ public class PressYourButton extends SingleThreadedGamePanel
         System.out.println("switching to score view");
     }
 
-    public void endCurrentPlayersTurn() {
+    public void endCurrentPlayersTurn() 
+    {
         boardSound.stop();
+        
+        game.gameState = GameStates.END_OF_TURN;
 
-        Player player = currentGame.players.get(currentGame.currentPlayer);
+        Player player = game.players.get(game.currentPlayer);
 
-        if (curentPointPanel != null) {
-            if (curentPointPanel.amount < 0) {
+        if (curentPointPanel != null) 
+        {
+            if (curentPointPanel.amount < 0) 
+            {
                 player.score = player.score / 2;
                 whammySound.play();
-            } else {
+            } 
+            else 
+            {
                 player.score += curentPointPanel.amount;
             }
         }
 
-        if (player.score >= currentGame.targetScore) {
-            gameState = GameStates.END_OF_GAME;
+        if (player.score >= game.targetScore) 
+        {
+            game.gameState = GameStates.END_OF_GAME;
 
             winnerSound.loop();
 
-            String message = "Player " + (currentGame.currentPlayer + 1) + " is the winner of this game!";
+            String message = "Player " + (game.currentPlayer + 1) + " is the winner of this game!";
             JOptionPane.showMessageDialog(this, message);
-        } else {
-            gameState = GameStates.END_OF_TURN;
+        } 
+        else 
+        {
+            game.gameState = GameStates.END_OF_TURN;
         }
 
         BufferedImage scoreBoard = drawScoreBoard();
         scoreBoardPanel.setImage(scoreBoard);
         updateScoreBoardPane();
 
-        System.out.println("current player: " + currentGame.currentPlayer + " - score: " + player.score);
+        System.out.println("current player: " + game.currentPlayer + " - score: " + player.score);
         if (curentPointPanel != null) {
             System.out.println("current panel score: " + curentPointPanel.amount);
         }
