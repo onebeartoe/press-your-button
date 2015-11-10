@@ -11,20 +11,21 @@
 
 	<packaging>pom</packaging>
 
-	<name>onebeartoe-press-your-luck</name>
+	<name>onebeartoe-press-your-button-parent</name>
 
 	<modules>
 
             
             <module>pc-swing</module>
+            <module>press-your-button-fx</module>
             
 <!--
             <module>pressyourluck-games</module>
             <module>pressyourluck-pc</module>
             <module>pressyourluck-plugins</module>
             -->
-
-        </modules>
+	 <module>model/press-your-button-model</module>
+	</modules>
 
  <build>
     <!-- To define the plugin version in your parent POM -->

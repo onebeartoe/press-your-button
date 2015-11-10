@@ -11,11 +11,11 @@
 
     <groupId>org.onebeartoe.pressyourluck</groupId>
     
-    <artifactId>press-your-luck-pc</artifactId>
+    <artifactId>press-your-button-pc</artifactId>
     
     <version>0.6</version>
     
-    <name>onebeartoe-press-your-luck-pc</name>
+    <name>onebeartoe-press-your-button-pc</name>
 
     <packaging>jar</packaging>        
     
