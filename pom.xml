@@ -4,23 +4,26 @@
     
     <modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.onebeartoe.games</groupId>
+    <groupId>org.onebeartoe.games</groupId>
+    <artifactId>onebeartoe-press-your-luck</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
 
-	<artifactId>onebeartoe-press-your-luck</artifactId>
+    <packaging>pom</packaging>
 
-	<version>0.0.1-SNAPSHOT</version>
+    <name>onebeartoe-press-your-button-parent</name>
 
-	<packaging>pom</packaging>
+    <modules>
+        <module>pc-swing</module>
+        <module>press-your-button-fx</module>
+        <module>model/press-your-button-model</module>
+        <module>press-your-button-service</module>
+    </modules>
 
-	<name>onebeartoe-press-your-button-parent</name>
-
-	<modules>
-            <module>pc-swing</module>
-            <module>press-your-button-fx</module>
-            <module>model/press-your-button-model</module>
-	 <module>press-your-button-service</module>
-	</modules>
-
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
  
     <build>
         <!-- To define the plugin version in your parent POM -->

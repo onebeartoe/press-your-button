@@ -20,7 +20,6 @@ import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
  */
 public class GameControlPanel extends JPanel
 {
-    
     private final PressYourButton plugin;
 
     public GameControlPanel(final PressYourButton plugin, PreviewPanel gameBoardPanel, PreviewPanel scoreBoardPanel) 
@@ -120,6 +119,10 @@ public class GameControlPanel extends JPanel
     {
 	public void actionPerformed(ActionEvent e) 
 	{
+            
+use NextPlayerResponses            
+//            pressYourButtonGame
+//move it            
             System.out.println("in next listener, game state is " + plugin.gameState);	    
 	    if(plugin.gameState == GameStates.END_OF_GAME)
 	    {
