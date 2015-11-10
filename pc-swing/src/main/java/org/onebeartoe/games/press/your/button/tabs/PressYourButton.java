@@ -28,11 +28,10 @@ import org.onebeartoe.games.press.your.button.GameStates;
 import org.onebeartoe.games.press.your.button.Player;
 import org.onebeartoe.games.press.your.button.board.BoardPanel;
 import org.onebeartoe.games.press.your.button.board.PlayerLabelPanel;
-import org.onebeartoe.games.press.your.button.board.PointPanel;
 import org.onebeartoe.games.press.your.button.board.PreviewPanel;
-import org.onebeartoe.games.press.your.button.board.WhammyPanel;
 import org.onebeartoe.games.press.your.button.plugins.swing.PressYourButtonWorker;
 import org.onebeartoe.games.press.your.button.plugins.swing.SingleThreadedGamePanel;
+import org.onebeartoe.games.press.your.button.service.PressYourButtonService;
 
 /**
  * This is a plugin for the Press Your Luck PC app. It show a board with moving
@@ -42,22 +41,36 @@ import org.onebeartoe.games.press.your.button.plugins.swing.SingleThreadedGamePa
  */
 public class PressYourButton extends SingleThreadedGamePanel 
 {
-
     private ActionListener worker = new PressYourButtonWorker(this);
+    
     private Thread bigButtonThread;
+    
     private List<BoardPanel> boardPanels;
+    
     volatile BoardPanel curentPointPanel;
+    
     protected List<Point> boardPanelLocations;
+    
     private PreviewPanel gameBoardPanel;
+    
     private PreviewPanel scoreBoardPanel;
+    
     public GameControlPanel endOfTurnPanel;
+    
     public GameCreationPanel newGamePanel;
+    
     volatile public GameStates gameState;
+    
     volatile public Game currentGame;
+    
     private Random locationRandom;
+    
     public AudioClip boardSound;
+    
     public AudioClip whammySound;
+    
     public AudioClip winnerSound;
+    
     public static final int boardWidth = 512;
     
     public static final int scaleFactor = 1;
@@ -65,6 +78,8 @@ public class PressYourButton extends SingleThreadedGamePanel
     public static final int columnCount = 5;
     
     public final int gamePanelWidth = boardWidth / columnCount;
+    
+    private PressYourButtonService pressYourButtonService;
 
     public PressYourButton() 
     {
@@ -72,6 +87,9 @@ public class PressYourButton extends SingleThreadedGamePanel
 
         gameState = GameStates.NEW_GAME_CONFIG;
 
+        // use the default implementation of the service
+        pressYourButtonService = new PressYourButtonService(){};        
+        
         setupBoardPanels();
 
         setupBoardPanelLocations();
@@ -100,7 +118,9 @@ public class PressYourButton extends SingleThreadedGamePanel
     /**
      * draw method
      */
-    public void endOfGame() {
+    public void endOfGame() 
+    {
+        System.out.println("End of run reached");
     }
 
     /**
@@ -344,63 +364,7 @@ public class PressYourButton extends SingleThreadedGamePanel
 
     private void setupBoardPanels() 
     {
-        BoardPanel p1 = new PointPanel(Color.YELLOW, 10);
-        BoardPanel p2 = new PointPanel(Color.BLUE, 20);
-        BoardPanel p3 = new PointPanel(Color.GREEN, 30);
-        BoardPanel p4 = new PointPanel(Color.LIGHT_GRAY, 40);
-        BoardPanel p5 = new PointPanel(Color.CYAN, 50);
-        BoardPanel p6 = new PointPanel(Color.DARK_GRAY, 60);
-        BoardPanel p7 = new PointPanel(Color.MAGENTA, 70);
-        BoardPanel p8 = new PointPanel(Color.ORANGE, 80);
-        BoardPanel p9 = new PointPanel(Color.PINK, 90);
-        BoardPanel p10 = new PointPanel(Color.YELLOW, 10);
-        BoardPanel p11 = new PointPanel(Color.orange, 20);
-        BoardPanel p12 = new PointPanel(Color.BLUE, 30); 
-        
-        BoardPanel p13 = new PointPanel(Color.GREEN, 30);
-        BoardPanel p14 = new PointPanel(Color.LIGHT_GRAY, 40);
-        BoardPanel p15 = new PointPanel(Color.CYAN, 50);
-        BoardPanel p16 = new PointPanel(Color.DARK_GRAY, 60);
-        BoardPanel p17 = new PointPanel(Color.MAGENTA, 70);
-        BoardPanel p18 = new PointPanel(Color.ORANGE, 80);
-        BoardPanel p19 = new PointPanel(Color.PINK, 90);
-        BoardPanel p20 = new PointPanel(Color.YELLOW, 10);
-        BoardPanel p21 = new PointPanel(Color.orange, 20);
-        BoardPanel p22 = new PointPanel(Color.BLUE, 30);
-
-        BoardPanel w1 = new WhammyPanel();
-        BoardPanel w2 = new WhammyPanel();
-        BoardPanel w3 = new WhammyPanel();
-        BoardPanel w4 = new WhammyPanel();
-
-        boardPanels = new ArrayList();
-        boardPanels.add(p1);
-        boardPanels.add(p2);
-        boardPanels.add(p3);
-        boardPanels.add(p4);
-        boardPanels.add(p5);
-        boardPanels.add(p6);
-        boardPanels.add(p7);
-        boardPanels.add(p8);
-        boardPanels.add(p9);
-        boardPanels.add(p10);
-        boardPanels.add(p11);
-        boardPanels.add(p12);
-        boardPanels.add(p13);
-        boardPanels.add(p14);
-        boardPanels.add(p15);
-        boardPanels.add(p16);
-        boardPanels.add(p17);
-        boardPanels.add(p18);
-        boardPanels.add(p19);
-        boardPanels.add(p20);
-        boardPanels.add(p21);
-        boardPanels.add(p22);
-
-        boardPanels.add(w1);
-        boardPanels.add(w2);
-        boardPanels.add(w3);
-        boardPanels.add(w4);
+        boardPanels = pressYourButtonService.getGameBoardPanels();
     }
 
     @Override
