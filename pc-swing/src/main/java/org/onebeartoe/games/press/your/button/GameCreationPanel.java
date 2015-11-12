@@ -71,11 +71,14 @@ public class GameCreationPanel extends JPanel implements ActionListener
 	app.remove(app.newGamePanel);
 	app.add(app.endOfTurnPanel, BorderLayout.CENTER);
 	
-	app.newGame();
+        app.startGame();
+//	app.newGame();
 	
-	game.gameState = GameStates.PLAYERS_TURN;
-	
-	app.boardSound.loop();
+// duechlandia        
+// put this back if it does not work        
+//	game.gameState = GameStates.PLAYERS_TURN;	
+//	app.boardSound.loop();
+//        
     }
     
     public void createNewGame()
@@ -91,7 +94,6 @@ public class GameCreationPanel extends JPanel implements ActionListener
 	    players.add(player);
 	}
 
-	game.players = players;
-	game.targetScore = targetScore;
+        game.createNewGame(players, targetScore);
     }   
 }

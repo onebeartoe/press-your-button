@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -23,6 +25,8 @@ public class GameControllerPanel extends JPanel
     private final PressYourButtonGame game;
     
     private final PressYourButton app;
+    
+    private Logger logger;
 
 //    public GameControllerPanel(final PressYourButtonGame app, PreviewPanel gameBoardPanel, PreviewPanel scoreBoardPanel)
     public GameControllerPanel(final PressYourButton app, PreviewPanel gameBoardPanel, PreviewPanel scoreBoardPanel, PressYourButtonGame game)
@@ -30,6 +34,8 @@ public class GameControllerPanel extends JPanel
 	this.app = app;
         
         this.game = game;
+        
+        logger = Logger.getLogger(getClass().getName());
 	
 	JButton stopButton = new JButton("Stop");
 	stopButton.addActionListener( new StopButtonListener() );	
@@ -67,12 +73,9 @@ public class GameControllerPanel extends JPanel
     
     private void newGame()
     {
-	app.winnerSound.stop();
-		    
 	app.remove(app.endOfTurnPanel);
 	app.add(app.newGamePanel, BorderLayout.CENTER);
 	app.newGame();
-	game.gameState = GameStates.NEW_GAME_CONFIG;
     }
     
     private class ShowScoreListener implements ActionListener
@@ -123,36 +126,39 @@ public class GameControllerPanel extends JPanel
     private class NextPlayerListener implements ActionListener
     {
 	public void actionPerformed(ActionEvent e) 
-	{
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            
-// use NextPlayerResponses                    
-            System.out.println("in next listener, game state is " + game.gameState);	    
-	    if(game.gameState == GameStates.END_OF_GAME)
-	    {
-		String message = "This game is over, please click the 'New Game' button.";
-		JOptionPane.showMessageDialog(GameControllerPanel.this, message);
-	    }
-	    else if(game.gameState == GameStates.PLAYERS_TURN)
-	    {
-		String message = "The current player cannot be skipped.  Try the 'New Game' button, if you are done with is game.";
-		JOptionPane.showMessageDialog(GameControllerPanel.this, message);
-	    }
-	    else if(game.gameState == GameStates.END_OF_TURN ||
-                        (game.gameState == GameStates.SHOW_SCORE && !app.game.targetReached() )
-		    )
-	    {
-		app.game.currentPlayer++;
-		    
-		if(app.game.currentPlayer == app.game.players.size() )
-		{
-		    app.game.currentPlayer = 0;
-		}
-
-		game.gameState = GameStates.PLAYERS_TURN;
-
-		app.boardSound.loop();
-	    }	    
+	{    
+            NextPlayerResponses commandRespnse = game.nextPlayer();
+        
+            switch(commandRespnse)
+            {
+                case GAME_IS_OVER_CLICK_NEW_GAME_BUTTON:
+                {
+                    String message = "This game is over, please click the 'New Game' button.";
+                    JOptionPane.showMessageDialog(GameControllerPanel.this, message);
+                    
+                    break;
+                }
+                case CURRENT_PLAYER_CANNOT_BE_SKIPPED_TRY_NEW_GAME:
+                {
+                    String message = "The current player cannot be skipped.  Try the 'New Game' button, if you are done with is game.";
+                    JOptionPane.showMessageDialog(GameControllerPanel.this, message);
+                    
+                    break;
+                }
+                case NEXT_PLAYERS_TURN:
+                {
+                    System.out.println("it is the next player's turn");
+                            
+                    break;
+                }
+                default:
+                {
+                    String message = "unknown enum: " + commandRespnse;
+                    logger.log(Level.SEVERE, message);
+                }
+            }
+            
+            System.out.println("in next listener, game state is " + game.gameState);
 	}	
     }
     
@@ -171,5 +177,4 @@ public class GameControllerPanel extends JPanel
             }
 	}
     }
-    
 }

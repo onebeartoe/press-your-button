@@ -1,8 +1,6 @@
 
 package org.onebeartoe.games.press.your.button.tabs;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -14,13 +12,14 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import org.onebeartoe.games.press.your.button.EndCurrentPlayersTurnResponses;
 import org.onebeartoe.games.press.your.button.GameControllerPanel;
 import org.onebeartoe.games.press.your.button.GameCreationPanel;
 import org.onebeartoe.games.press.your.button.GameStates;
@@ -45,10 +44,6 @@ public class PressYourButton extends SingleThreadedGamePanel
     
     private Thread bigButtonThread;
     
-    private List<BoardPanel> boardPanels;
-    
-    volatile BoardPanel curentPointPanel;
-    
     protected List<Point> boardPanelLocations;
     
     private PreviewPanel gameBoardPanel;
@@ -60,15 +55,7 @@ public class PressYourButton extends SingleThreadedGamePanel
     public GameCreationPanel newGamePanel;
     
     volatile public PressYourButtonGame game;
-    
-    private Random locationRandom;
-    
-    public AudioClip boardSound;
-    
-    public AudioClip whammySound;
-    
-    public AudioClip winnerSound;
-    
+        
     public static final int boardWidth = 512;
     
     public static final int scaleFactor = 1;
@@ -78,9 +65,13 @@ public class PressYourButton extends SingleThreadedGamePanel
     public final int gamePanelWidth = boardWidth / columnCount;
     
     private PressYourButtonService pressYourButtonService;
+    
+    private Logger logger;
 
     public PressYourButton() 
     {
+        logger = Logger.getLogger(getClass().getName());
+        
         game = new PressYourButtonGame(){};
         game.gameState = GameStates.PLAYERS_TURN;
 
@@ -89,13 +80,7 @@ public class PressYourButton extends SingleThreadedGamePanel
         // use the default implementation of the service
         pressYourButtonService = new PressYourButtonService(){};        
         
-        setupBoardPanels();
-
         setupBoardPanelLocations();
-
-        loadSounds();
-
-        locationRandom = new Random();
 
         setLayout(new BorderLayout());
 
@@ -114,6 +99,158 @@ public class PressYourButton extends SingleThreadedGamePanel
         add(newGamePanel, BorderLayout.CENTER);
     }
 
+    /**
+     * This method shuffles the panels and updates the on-screen panels.
+     * Calling this method repeatedly animates the point panels and selected panel.
+     */
+    public void drawBoardForPlayersTurn() 
+    {
+//        Duration.of
+        timer.setDelay(690);  // milliseconds 
+
+        BufferedImage img = new BufferedImage(boardWidth, boardWidth, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = img.createGraphics();
+
+        g2d.setPaint(Color.LIGHT_GRAY);
+        g2d.fillRect(0, 0, boardWidth, boardWidth);
+
+        Color textColor = Color.GREEN;
+        g2d.setPaint(textColor);
+
+        String fontFamily = "Arial";
+        Font font = new Font(fontFamily, Font.PLAIN, 32);
+
+        g2d.setFont(font);
+        
+        game.shuffleBoardPanels();
+        
+        int currentPanelIndex = game.getCurentPointPanelIndex();
+
+        int i = 0;
+        
+        for (Point location : boardPanelLocations) 
+        {
+            BoardPanel panel = game.getBoardPanels().get(i);
+
+            Color foreground;
+            
+            if (i == currentPanelIndex) 
+            {
+                foreground = Color.RED;
+            } 
+            else 
+            {
+                foreground = Color.WHITE;
+            }
+
+            panel.draw(g2d, location, foreground, gamePanelWidth);
+
+//            System.out.println("Location " + i + " at " + location.x + ", " + location.y);
+
+            i++;
+        }
+//        System.out.println("i = " + i);
+
+        Point labelLocation = new Point(gamePanelWidth, gamePanelWidth);
+        String label = "P" + (game.currentPlayer + 1);
+        BoardPanel playerLabel = new PlayerLabelPanel(label);
+        
+        // temporarily don't show the user       
+        playerLabel.draw(g2d, labelLocation, Color.RED, gamePanelWidth);
+
+        g2d.dispose();
+
+        gameBoardPanel.setImage(img);
+
+        SwingUtilities.invokeLater(new Runnable() 
+        {
+            public void run() 
+            {
+                gameBoardPanel.invalidate();
+                gameBoardPanel.updateUI();
+            }
+        });
+    }    
+
+    private BufferedImage drawScoreBoard() 
+    {
+        int width = 128;
+        int height = 128;
+
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = img.createGraphics();
+        
+        g2d.setPaint(Color.BLACK);
+        g2d.fillRect(0, 0, width, height);
+
+        Color textColor = Color.WHITE;
+        g2d.setPaint(textColor);
+
+        String fontFamily = "Arial";
+        Font font = new Font(fontFamily, Font.PLAIN, 34);
+
+        g2d.setFont(font);
+
+        System.out.println(game.toString());
+
+        int verticalGap = 40;
+        int i = 0;
+        for (Player p : game.players) {
+            String s = "P" + (i + 1) + " " + p.score;
+            int x = 5;
+            int y = 30 + i * verticalGap;
+            System.out.println("drawing " + s + " at " + x + ", " + y + " at " + new Date());
+            g2d.drawString(s, x, y);
+            i++;
+        }
+
+        g2d.dispose();
+
+        return img;
+    }
+
+    public void drawScoreBoardOnPanel() 
+    {
+        BufferedImage before = drawScoreBoard();
+
+        scoreBoardPanel.setImage(before);
+
+        updateScoreBoardPane();
+
+        timer.setDelay(5000);  // milliseconds 	
+    }
+
+    public void endCurrentPlayersTurn()
+    {
+//        curentPointPanel == 3;
+        EndCurrentPlayersTurnResponses response = game.endCurrentPlayersTurn();
+        
+        switch(response)
+        {
+            case END_OF_GAME:
+            {
+                String message = "Player " + (game.currentPlayer + 1) + " is the winner of this game!";
+                JOptionPane.showMessageDialog(this, message);
+                
+                break;
+            }
+            default:
+            {
+                String message = "unknown enum: " + response;
+                logger.log(Level.SEVERE, message);
+            }
+        }
+
+        BufferedImage scoreBoard = drawScoreBoard();
+        scoreBoardPanel.setImage(scoreBoard);
+        updateScoreBoardPane();
+
+        String message = "current player: " + game.currentPlayer + " - score: " + game.players.get(game.currentPlayer).score;
+        System.out.println(message);
+    }
+    
     /**
      * draw method
      */
@@ -144,26 +281,9 @@ public class PressYourButton extends SingleThreadedGamePanel
     }
 
     @Override
-    public String getTabTitle() {
-        return "Press Your Button";
-    }
-
-    private void loadSounds() //throws Exception
+    public String getTabTitle() 
     {
-        String path = "big_board.wav";
-        URL url = getClass().getResource(path);
-        boardSound = Applet.newAudioClip(url);
-
-        path = "stop_at_a_whammy.wav";
-        
-        // http://www.zedge.net/ringtones/0-1-1-press%20your%20luck/
-        path = "whammy.wav";
-        url = getClass().getResource(path);
-        whammySound = Applet.newAudioClip(url);
-
-        path = "winner.wav";
-        url = getClass().getResource(path);
-        winnerSound = Applet.newAudioClip(url);
+        return "Press Your Button";
     }
 
     public void newGame() 
@@ -171,14 +291,22 @@ public class PressYourButton extends SingleThreadedGamePanel
         invalidate();
         updateUI();
 
+//        endCurrentPlayersTurn();
+        
         newGamePanel.createNewGame();
-
-        if (curentPointPanel != null) {
-            curentPointPanel.amount = 0;
-        }
-
+        
         endCurrentPlayersTurn();
     }
+    
+    public void startGame() 
+    {
+        invalidate();
+        updateUI();
+
+        endCurrentPlayersTurn();
+        
+        newGamePanel.createNewGame();
+    }    
 
     /**
      * draw method for a new game
@@ -186,72 +314,6 @@ public class PressYourButton extends SingleThreadedGamePanel
     public void newGameConfiguration() 
     {
         timer.setDelay(1900);  // milliseconds 
-    }
-
-    /**
-     * this animates the moving point panels and a selected panel
-     */
-    public void drawBoardForPlayersTurn() 
-    {
-        timer.setDelay(690);  // milliseconds 
-
-        BufferedImage img = new BufferedImage(boardWidth, boardWidth, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D g2d = img.createGraphics();
-
-        g2d.setPaint(Color.LIGHT_GRAY);
-        g2d.fillRect(0, 0, boardWidth, boardWidth);
-
-        Color textColor = Color.GREEN;
-        g2d.setPaint(textColor);
-
-        String fontFamily = "Arial";
-        Font font = new Font(fontFamily, Font.PLAIN, 32);
-
-        g2d.setFont(font);
-
-        int rl = locationRandom.nextInt(boardPanelLocations.size());
-
-        int i = 0;
-        Collections.shuffle(boardPanels);
-        for (Point location : boardPanelLocations) 
-        {
-            BoardPanel panel = boardPanels.get(i);
-
-            Color foreground;
-            if (i == rl) {
-                curentPointPanel = panel;
-                foreground = Color.RED;
-            } else {
-                foreground = Color.WHITE;
-            }
-
-            panel.draw(g2d, location, foreground, gamePanelWidth);
-
-//            System.out.println("Location " + i + " at " + location.x + ", " + location.y);
-
-            i++;
-        }
-//        System.out.println("i = " + i);
-
-        Point labelLocation = new Point(gamePanelWidth, gamePanelWidth);
-        String label = "P" + (game.currentPlayer + 1);
-        BoardPanel playerLabel = new PlayerLabelPanel(label);
-// temporarily don't show the user       
-        playerLabel.draw(g2d, labelLocation, Color.RED, gamePanelWidth);
-
-        g2d.dispose();
-
-        gameBoardPanel.setImage(img);
-
-        SwingUtilities.invokeLater(new Runnable() 
-        {
-            public void run() 
-            {
-                gameBoardPanel.invalidate();
-                gameBoardPanel.updateUI();
-            }
-        });
     }
 
     /**
@@ -312,61 +374,6 @@ public class PressYourButton extends SingleThreadedGamePanel
         boardPanelLocations.add(p16);
     }
 
-    private BufferedImage drawScoreBoard() 
-    {
-        int width = 128;
-        int height = 128;
-
-        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D g2d = img.createGraphics();
-
-        
-        g2d.setPaint(Color.BLACK);
-        g2d.fillRect(0, 0, width, height);
-
-        Color textColor = Color.WHITE;
-        g2d.setPaint(textColor);
-
-        String fontFamily = "Arial";
-        Font font = new Font(fontFamily, Font.PLAIN, 34);
-
-        g2d.setFont(font);
-
-        System.out.println(game.toString());
-
-        int verticalGap = 40;
-        int i = 0;
-        for (Player p : game.players) {
-            String s = "P" + (i + 1) + " " + p.score;
-            int x = 5;
-            int y = 30 + i * verticalGap;
-            System.out.println("drawing " + s + " at " + x + ", " + y + " at " + new Date());
-            g2d.drawString(s, x, y);
-            i++;
-        }
-
-        g2d.dispose();
-
-        return img;
-    }
-
-    public void drawScoreBoardOnPanel() 
-    {
-        BufferedImage before = drawScoreBoard();
-
-        scoreBoardPanel.setImage(before);
-
-        updateScoreBoardPane();
-
-        timer.setDelay(5000);  // milliseconds 	
-    }
-
-    private void setupBoardPanels() 
-    {
-        boardPanels = pressYourButtonService.getGameBoardPanels();
-    }
-
     @Override
     public void startTabActivity() 
     {
@@ -382,53 +389,9 @@ public class PressYourButton extends SingleThreadedGamePanel
         }
     }
 
-    public void switchToScoreView(boolean haveWinner) {
-        System.out.println("switching to score view");
-    }
-
-    public void endCurrentPlayersTurn() 
+    public void switchToScoreView(boolean haveWinner) 
     {
-        boardSound.stop();
-        
-        game.gameState = GameStates.END_OF_TURN;
-
-        Player player = game.players.get(game.currentPlayer);
-
-        if (curentPointPanel != null) 
-        {
-            if (curentPointPanel.amount < 0) 
-            {
-                player.score = player.score / 2;
-                whammySound.play();
-            } 
-            else 
-            {
-                player.score += curentPointPanel.amount;
-            }
-        }
-
-        if (player.score >= game.targetScore) 
-        {
-            game.gameState = GameStates.END_OF_GAME;
-
-            winnerSound.loop();
-
-            String message = "Player " + (game.currentPlayer + 1) + " is the winner of this game!";
-            JOptionPane.showMessageDialog(this, message);
-        } 
-        else 
-        {
-            game.gameState = GameStates.END_OF_TURN;
-        }
-
-        BufferedImage scoreBoard = drawScoreBoard();
-        scoreBoardPanel.setImage(scoreBoard);
-        updateScoreBoardPane();
-
-        System.out.println("current player: " + game.currentPlayer + " - score: " + player.score);
-        if (curentPointPanel != null) {
-            System.out.println("current panel score: " + curentPointPanel.amount);
-        }
+        System.out.println("switching to score view");
     }
 
     public void updateScoreBoardPane() 
