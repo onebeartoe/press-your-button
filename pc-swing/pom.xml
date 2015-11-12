@@ -15,7 +15,7 @@
     
     <version>0.6</version>
     
-    <name>onebeartoe-press-your-button-pc</name>
+    <name>onebeartoe-press-your-button-swing</name>
 
     <packaging>jar</packaging>        
     
@@ -58,7 +58,7 @@
 		<version>1.3</version>
 		<configuration>
 
-		    <mainClass>org.onebeartoe.games.press.your.button.App</mainClass>
+		    <mainClass>org.onebeartoe.games.press.your.button.PressYourButtonSwingApp</mainClass>
 
 		    <!-- only required if signing the jar file -->
 		    <keyStoreAlias>example-user</keyStoreAlias>
@@ -75,7 +75,7 @@
 		<configuration>
 		    <archive>
 			<manifest>
-			    <mainClass>org.onebeartoe.games.press.your.button.App</mainClass>
+			    <mainClass>org.onebeartoe.games.press.your.button.PressYourButtonSwingApp</mainClass>
 			</manifest>
 		    </archive>
 		    <descriptorRefs>
@@ -107,7 +107,7 @@
 			<manifest>
 			    <addClasspath>true</addClasspath>
 			    <classpathPrefix>lib/</classpathPrefix>
-			    <mainClass>org.onebeartoe.games.press.your.button.App</mainClass>
+			    <mainClass>org.onebeartoe.games.press.your.button.PressYourButtonSwingApp</mainClass>
 			</manifest>
 		    </archive>
 		</configuration>

@@ -103,12 +103,11 @@ public class GameControllerPanel extends JPanel
 	public void actionPerformed(ActionEvent e) 
 	{	    
             System.out.println("in new game listener, game state is " + game.gameState);
-
-	    if(game.gameState == GameStates.PLAYERS_TURN ||
-		    game.gameState == GameStates.END_OF_TURN ||
-			game.gameState == GameStates.SHOW_SCORE)
+            
+	    if( game.inProgress() )
 	    {
-		String message = "Are you sure you want to end the current game?";
+		String message = PressYourButtonConstants.CONFIRM_END_CURRENT_GAME;
+                
 		int result = JOptionPane.showConfirmDialog(GameControllerPanel.this, message);
 		if(result == JOptionPane.OK_OPTION)
 		{
@@ -118,7 +117,6 @@ public class GameControllerPanel extends JPanel
 	    else if(game.gameState == GameStates.END_OF_GAME)
 	    {
 		newGame();
-		
 	    }
         }
     }

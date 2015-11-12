@@ -28,6 +28,14 @@
         <name>Your Organisation</name>
     </organization>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.onebeartoe.games</groupId>
+            <artifactId>press-your-button-model</artifactId>
+            <version>0.1-SNAPSHOT</version>            
+        </dependency>
+    </dependencies>
+    
     <build>
         <plugins>
             <plugin>

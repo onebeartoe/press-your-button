@@ -374,7 +374,8 @@ public class PressYourButtonGamePanel extends SingleThreadedGamePanel
     }
 
     @Override
-    public void stopTabActivity() {
+    public void stopTabActivity() 
+    {
         super.stopTabActivity();
 
         if (bigButtonThread != null) {
@@ -391,7 +392,8 @@ public class PressYourButtonGamePanel extends SingleThreadedGamePanel
     {
         SwingUtilities.invokeLater(new Runnable() 
         {
-            public void run() {
+            public void run() 
+            {
                 System.out.println("updating the score board pane");
                 scoreBoardPanel.invalidate();
                 scoreBoardPanel.updateUI();

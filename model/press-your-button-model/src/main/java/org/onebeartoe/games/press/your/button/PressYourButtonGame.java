@@ -123,7 +123,16 @@ public class PressYourButtonGame
     public int getCurentPointPanelIndex()
     {
         return curentPointPanelIndex;
-    }    
+    }
+    
+    public boolean inProgress()
+    {
+        boolean inProgress = gameState == GameStates.PLAYERS_TURN ||
+                             gameState == GameStates.END_OF_TURN ||
+                             gameState == GameStates.SHOW_SCORE;
+        
+        return inProgress;
+    }
     
     private void loadSounds()
     { 

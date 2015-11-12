@@ -6,18 +6,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-      <BorderPane layoutY="3.0" prefHeight="200.0" prefWidth="200.0"
-                    xmlns="http://javafx.com/javafx/8" 
-                xmlns:fx="http://javafx.com/fxml/1" 
-                fx:controller="org.onebeartoe.games.press.your.button.fx.FXMLController">
-         <center>
-            <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
-         </center>
+<BorderPane layoutY="3.0" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.onebeartoe.games.press.your.button.fx.FXMLController">
          <top>
               <Button fx:id="button" onAction="#handleButtonAction" text="Click Me!" BorderPane.alignment="CENTER" />
          </top>
-         <bottom>
-              <Label fx:id="label" minHeight="16" minWidth="69" BorderPane.alignment="CENTER" />
-         </bottom>
+   <bottom>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+                  <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#handleNewGameButton" text="New Game" />
+         </children>
+      </HBox>
+   </bottom>
       </BorderPane>

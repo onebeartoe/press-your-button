@@ -48,9 +48,8 @@ import org.onebeartoe.games.press.your.button.preferences.JavaPreferencesService
 import org.onebeartoe.games.press.your.button.preferences.PreferencesService;
 import org.onebeartoe.games.press.your.button.tabs.PressYourButtonGamePanel;
 
-public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdapter
-{    
-    
+public class PressYourButtonSwingApp extends WindowAdapter //extends IOIOSwingApp extends WindowAdapter
+{
     private final Logger logger;
     
     private PreferencesService preferenceService;
@@ -63,21 +62,16 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
     
     private JTabbedPane tabbedPane;
     
-//    private JFileChooser pluginChooser;
-    
     private JLabel statusLabel;
     
     public static final int DEFAULT_HEIGHT = 600;
     
     public static final int DEFAULT_WIDTH = 450;
     
-    public App()
+    public PressYourButtonSwingApp()
     {
-	String className = App.class.getName();
+	String className = PressYourButtonSwingApp.class.getName();
 	logger = Logger.getLogger(className);
-	
-//	pluginChooser = new JFileChooser();
-//	pluginChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 	
 	preferenceService = new JavaPreferencesService();
 
@@ -172,7 +166,6 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	String userIconPath = "/tab_icons/my_small.png";
 	URL userUrl = getClass().getResource(userIconPath);
 	ImageIcon userTabIcon = new ImageIcon(userUrl);	
-//	String key = GamePreferencesKeys.userImagesDirectory;	
 
 	// animations tab
 	String path2 = "/tab_icons/ship_small.png";
@@ -215,9 +208,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	{
 	    logger.log(Level.INFO, ex.getMessage(), ex);
 	}
-        
-        
-	
+
 	frame.addWindowListener(this);
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 	frame.setLayout( new BorderLayout() );
@@ -316,7 +307,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
     
     public static void main(String[] args) throws Exception 
     {		
-	App app = new App();
+	PressYourButtonSwingApp app = new PressYourButtonSwingApp();
     }
     
     private void savePreferences()
@@ -424,14 +415,13 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	    }
 	    dotCount++;
 
-	    App.this.statusLabel.setText( label.toString() );
+	    PressYourButtonSwingApp.this.statusLabel.setText( label.toString() );
 	    
 	    Date d = new Date();
 	    long now = d.getTime();
 	    if(now > periodEnd)
 	    {
 		searchTimer.stop();
-		
 	    }
 	}
     }
@@ -449,6 +439,5 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	    GamePanel p = (GamePanel) c;
 	    p.startTabActivity();
 	}
-    }
-    
+    }   
 }
