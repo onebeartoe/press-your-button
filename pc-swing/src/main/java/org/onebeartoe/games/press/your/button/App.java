@@ -17,23 +17,16 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -50,11 +43,10 @@ import javax.swing.border.BevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.onebeartoe.games.press.your.button.plugins.PluginConfigEntry;
-import org.onebeartoe.games.press.your.button.preferences.GamePreferencesKeys;
+import org.onebeartoe.games.press.your.button.plugins.swing.GamePanel;
 import org.onebeartoe.games.press.your.button.preferences.JavaPreferencesService;
 import org.onebeartoe.games.press.your.button.preferences.PreferencesService;
-import org.onebeartoe.games.press.your.button.swing.GamePanel;
-import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
+import org.onebeartoe.games.press.your.button.tabs.PressYourButtonGamePanel;
 
 public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdapter
 {    
@@ -105,7 +97,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	String path2 = "/icons/tabs/game.png";
 	URL url2 = getClass().getResource(path2);
 	ImageIcon animationsTabIcon = new ImageIcon(url2);
-	final GamePanel animationsPanel = new PressYourButton();
+	final GamePanel animationsPanel = new PressYourButtonGamePanel();
 	
 	frame = new JFrame("Press Your Butotn");
 	
@@ -180,13 +172,13 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	String userIconPath = "/tab_icons/my_small.png";
 	URL userUrl = getClass().getResource(userIconPath);
 	ImageIcon userTabIcon = new ImageIcon(userUrl);	
-	String key = GamePreferencesKeys.userImagesDirectory;	
+//	String key = GamePreferencesKeys.userImagesDirectory;	
 
 	// animations tab
 	String path2 = "/tab_icons/ship_small.png";
 	URL url2 = getClass().getResource(path2);
 	ImageIcon animationsTabIcon = new ImageIcon(url2);
-	final GamePanel animationsPanel = new PressYourButton();
+	final GamePanel animationsPanel = new PressYourButtonGamePanel();
 	
 	frame = new JFrame("Press Your Button");
 	

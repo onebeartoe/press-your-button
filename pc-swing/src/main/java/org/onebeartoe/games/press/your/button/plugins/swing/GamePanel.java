@@ -1,5 +1,5 @@
 
-package org.onebeartoe.games.press.your.button.swing;
+package org.onebeartoe.games.press.your.button.plugins.swing;
 
 import java.net.URL;
 import javax.swing.ImageIcon;
@@ -10,11 +10,7 @@ import org.onebeartoe.games.press.your.button.plugins.GamePlugin;
  * @author Administrator
  */
 public abstract class GamePanel extends JPanel implements GamePlugin 
-{
-
-    
- 
-    
+{   
     public ImageIcon getTabIcon()
     {
 	System.out.println("\n\n\nusing the default tab\n");
@@ -29,6 +25,5 @@ public abstract class GamePanel extends JPanel implements GamePlugin
     public String getTabTitle()
     {
 	return "Default Plugin Title";
-    }
-    
+    }    
 }

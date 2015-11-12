@@ -6,7 +6,7 @@ import java.awt.Point;
 import java.util.List;
 import javax.swing.JFrame;
 import org.onebeartoe.games.press.your.button.plugins.PluginConfigEntry;
-import org.onebeartoe.games.press.your.button.swing.GamePanel;
+import org.onebeartoe.games.press.your.button.plugins.swing.GamePanel;
 
 /**
  * @author rmarquez

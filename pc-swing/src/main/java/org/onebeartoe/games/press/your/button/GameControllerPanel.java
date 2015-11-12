@@ -15,7 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.onebeartoe.games.press.your.button.board.PreviewPanel;
-import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
+import org.onebeartoe.games.press.your.button.tabs.PressYourButtonGamePanel;
 
 /**
  * @author rmarquez
@@ -24,12 +24,12 @@ public class GameControllerPanel extends JPanel
 {
     private final PressYourButtonGame game;
     
-    private final PressYourButton app;
+    private final PressYourButtonGamePanel app;
     
     private Logger logger;
 
 //    public GameControllerPanel(final PressYourButtonGame app, PreviewPanel gameBoardPanel, PreviewPanel scoreBoardPanel)
-    public GameControllerPanel(final PressYourButton app, PreviewPanel gameBoardPanel, PreviewPanel scoreBoardPanel, PressYourButtonGame game)
+    public GameControllerPanel(final PressYourButtonGamePanel app, PreviewPanel gameBoardPanel, PreviewPanel scoreBoardPanel, PressYourButtonGame game)
     {
 	this.app = app;
         

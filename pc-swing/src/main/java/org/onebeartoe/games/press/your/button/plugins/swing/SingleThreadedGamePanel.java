@@ -3,7 +3,6 @@ package org.onebeartoe.games.press.your.button.plugins.swing;
 
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
-import org.onebeartoe.games.press.your.button.swing.GamePanel;
 
 /**
  * @author rmarquez

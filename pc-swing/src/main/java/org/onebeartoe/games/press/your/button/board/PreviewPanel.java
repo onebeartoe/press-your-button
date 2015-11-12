@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.JPanel;
-import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
+import org.onebeartoe.games.press.your.button.tabs.PressYourButtonGamePanel;
 
 /**
  * @author rmarquez
@@ -16,11 +16,11 @@ public class PreviewPanel extends JPanel
     
     private Image image;
     
-    private final PressYourButton plugin;
+    private final PressYourButtonGamePanel plugin;
     
     public Dimension borardDimension;
 
-    public PreviewPanel(final PressYourButton plugin, Dimension borardDimension) 
+    public PreviewPanel(final PressYourButtonGamePanel plugin, Dimension borardDimension) 
     {
 	this.plugin = plugin;
 	this.borardDimension = borardDimension;

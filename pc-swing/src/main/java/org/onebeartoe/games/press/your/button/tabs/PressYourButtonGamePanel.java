@@ -30,7 +30,6 @@ import org.onebeartoe.games.press.your.button.board.PlayerLabelPanel;
 import org.onebeartoe.games.press.your.button.board.PreviewPanel;
 import org.onebeartoe.games.press.your.button.plugins.swing.PressYourButtonWorker;
 import org.onebeartoe.games.press.your.button.plugins.swing.SingleThreadedGamePanel;
-import org.onebeartoe.games.press.your.button.service.PressYourButtonService;
 
 /**
  * This is a plugin for the Press Your Luck PC app. It show a board with moving
@@ -38,17 +37,17 @@ import org.onebeartoe.games.press.your.button.service.PressYourButtonService;
  * point panel the points are added the users score. Landing on a whammy will
  * zero out their score.
  */
-public class PressYourButton extends SingleThreadedGamePanel 
+public class PressYourButtonGamePanel extends SingleThreadedGamePanel 
 {
-    private ActionListener worker;// = new PressYourButtonWorker(this);
+    private final ActionListener worker;
     
     private Thread bigButtonThread;
     
     protected List<Point> boardPanelLocations;
     
-    private PreviewPanel gameBoardPanel;
+    private final PreviewPanel gameBoardPanel;
     
-    private PreviewPanel scoreBoardPanel;
+    private final PreviewPanel scoreBoardPanel;
     
     public GameControllerPanel endOfTurnPanel;
     
@@ -64,11 +63,11 @@ public class PressYourButton extends SingleThreadedGamePanel
     
     public final int gamePanelWidth = boardWidth / columnCount;
     
-    private PressYourButtonService pressYourButtonService;
+//    private PressYourButtonService pressYourButtonService;
     
     private Logger logger;
 
-    public PressYourButton() 
+    public PressYourButtonGamePanel() 
     {
         logger = Logger.getLogger(getClass().getName());
         
@@ -78,7 +77,7 @@ public class PressYourButton extends SingleThreadedGamePanel
         worker = new PressYourButtonWorker(this, game);
         
         // use the default implementation of the service
-        pressYourButtonService = new PressYourButtonService(){};        
+//        pressYourButtonService = new PressYourButtonService(){};        
         
         setupBoardPanelLocations();
 
@@ -146,11 +145,8 @@ public class PressYourButton extends SingleThreadedGamePanel
 
             panel.draw(g2d, location, foreground, gamePanelWidth);
 
-//            System.out.println("Location " + i + " at " + location.x + ", " + location.y);
-
             i++;
         }
-//        System.out.println("i = " + i);
 
         Point labelLocation = new Point(gamePanelWidth, gamePanelWidth);
         String label = "P" + (game.currentPlayer + 1);
@@ -224,7 +220,6 @@ public class PressYourButton extends SingleThreadedGamePanel
 
     public void endCurrentPlayersTurn()
     {
-//        curentPointPanel == 3;
         EndCurrentPlayersTurnResponses response = game.endCurrentPlayersTurn();
         
         switch(response)
@@ -290,8 +285,6 @@ public class PressYourButton extends SingleThreadedGamePanel
     {
         invalidate();
         updateUI();
-
-//        endCurrentPlayersTurn();
         
         newGamePanel.createNewGame();
         

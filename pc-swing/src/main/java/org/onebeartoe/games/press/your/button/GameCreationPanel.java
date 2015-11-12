@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
-import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
+import org.onebeartoe.games.press.your.button.tabs.PressYourButtonGamePanel;
 
 /**
  * @author rmarquez
@@ -26,11 +26,11 @@ public class GameCreationPanel extends JPanel implements ActionListener
     
     private JButton startButton;
     
-    private PressYourButton app;
+    private PressYourButtonGamePanel app;
     
     private PressYourButtonGame game;
     
-    public GameCreationPanel(PressYourButton parent, PressYourButtonGame game)
+    public GameCreationPanel(PressYourButtonGamePanel parent, PressYourButtonGame game)
     {
 	this.app = parent;
         
@@ -72,13 +72,6 @@ public class GameCreationPanel extends JPanel implements ActionListener
 	app.add(app.endOfTurnPanel, BorderLayout.CENTER);
 	
         app.startGame();
-//	app.newGame();
-	
-// duechlandia        
-// put this back if it does not work        
-//	game.gameState = GameStates.PLAYERS_TURN;	
-//	app.boardSound.loop();
-//        
     }
     
     public void createNewGame()

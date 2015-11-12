@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import org.onebeartoe.games.press.your.button.plugins.PluginConfigEntry;
-import org.onebeartoe.games.press.your.button.swing.GamePanel;
+import org.onebeartoe.games.press.your.button.plugins.swing.GamePanel;
 
 /**
  * @deprecated Use the version at https://github.com/onebeartoe/java-libraries/tree/master/onebeartoe-application/src/main/java/org/onebeartoe/application

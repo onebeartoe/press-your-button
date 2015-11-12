@@ -8,18 +8,18 @@ import static org.onebeartoe.games.press.your.button.GameStates.END_OF_TURN;
 import static org.onebeartoe.games.press.your.button.GameStates.PLAYERS_TURN;
 import static org.onebeartoe.games.press.your.button.GameStates.SHOW_SCORE;
 import org.onebeartoe.games.press.your.button.PressYourButtonGame;
-import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
+import org.onebeartoe.games.press.your.button.tabs.PressYourButtonGamePanel;
 
 /**
  * @author rmarquez
  */
 public class PressYourButtonWorker implements ActionListener 
 {
-    private PressYourButton app;
+    private PressYourButtonGamePanel app;
     
     private volatile PressYourButtonGame game;
 
-    public PressYourButtonWorker(final PressYourButton plugin, PressYourButtonGame game) 
+    public PressYourButtonWorker(final PressYourButtonGamePanel plugin, PressYourButtonGame game) 
     {
 	this.app = plugin;
         
