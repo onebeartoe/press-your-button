@@ -24,6 +24,7 @@ import org.onebeartoe.games.press.your.button.GameControllerPanel;
 import org.onebeartoe.games.press.your.button.GameCreationPanel;
 import org.onebeartoe.games.press.your.button.GameStates;
 import org.onebeartoe.games.press.your.button.Player;
+import org.onebeartoe.games.press.your.button.PressYourButtonConstants;
 import org.onebeartoe.games.press.your.button.PressYourButtonGame;
 import org.onebeartoe.games.press.your.button.board.BoardPanel;
 import org.onebeartoe.games.press.your.button.board.PlayerLabelPanel;
@@ -55,15 +56,13 @@ public class PressYourButtonGamePanel extends SingleThreadedGamePanel
     
     volatile public PressYourButtonGame game;
         
-    public static final int boardWidth = 512;
+    public static final int BOARD_WIDTH = 512;
     
     public static final int scaleFactor = 1;
     
     public static final int columnCount = 5;
     
-    public final int gamePanelWidth = boardWidth / columnCount;
-    
-//    private PressYourButtonService pressYourButtonService;
+    public final int gamePanelWidth = BOARD_WIDTH / columnCount;
     
     private Logger logger;
 
@@ -76,9 +75,6 @@ public class PressYourButtonGamePanel extends SingleThreadedGamePanel
 
         worker = new PressYourButtonWorker(this, game);
         
-        // use the default implementation of the service
-//        pressYourButtonService = new PressYourButtonService(){};        
-        
         setupBoardPanelLocations();
 
         setLayout(new BorderLayout());
@@ -89,7 +85,7 @@ public class PressYourButtonGamePanel extends SingleThreadedGamePanel
         scoreBoardPanel = new PreviewPanel(this, scoreBoardDimension);
         scoreBoardPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        Dimension boardDimension = new Dimension(boardWidth, boardWidth);
+        Dimension boardDimension = new Dimension(BOARD_WIDTH, BOARD_WIDTH);
         gameBoardPanel = new PreviewPanel(this, boardDimension);
         gameBoardPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -105,14 +101,14 @@ public class PressYourButtonGamePanel extends SingleThreadedGamePanel
     public void drawBoardForPlayersTurn() 
     {
 //        Duration.of
-        timer.setDelay(690);  // milliseconds 
+        timer.setDelay(PressYourButtonConstants.BOARD_REFRESH_DELAY);  // milliseconds 
 
-        BufferedImage img = new BufferedImage(boardWidth, boardWidth, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img = new BufferedImage(BOARD_WIDTH, BOARD_WIDTH, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = img.createGraphics();
 
         g2d.setPaint(Color.LIGHT_GRAY);
-        g2d.fillRect(0, 0, boardWidth, boardWidth);
+        g2d.fillRect(0, 0, BOARD_WIDTH, BOARD_WIDTH);
 
         Color textColor = Color.GREEN;
         g2d.setPaint(textColor);

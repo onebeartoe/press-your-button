@@ -46,6 +46,11 @@ public abstract class BoardPanel
 	g2d.setFont(font);	    
 	g2d.drawString(text, x, y);
     }
+
+    public Color getBackgroundColor()
+    {
+        return backgroundColor;
+    }
     
     protected Point getTextLocation(Point origin)
     {        
