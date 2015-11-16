@@ -137,7 +137,6 @@ public class PressYourButtonGame
     private void loadSounds()
     { 
         String path = "/big_board.wav";
-//        String path = "/org/onebeartoe/games/press/your/button/" + "big_board.wav";
         
         URL url = getClass().getResource(path);
         boardSound = Applet.newAudioClip(url);
@@ -182,13 +181,13 @@ public class PressYourButtonGame
     {
 	StringBuilder sb = new StringBuilder();
 	
-	sb.append("target score: " + targetScore + " - ");
-	sb.append("current player: " + currentPlayer + " - ");
+	sb.append("target score: ").append(targetScore).append(" - ");
+	sb.append("current player: ").append(currentPlayer).append(" - ");
 	
 	for(int i=0; i < players.size(); i++)    
 	{
 	    Player p = players.get(i);
-	    sb.append("P" + (i+1) + ": " + p.score + "\t");
+	    sb.append("P").append(i+1).append(": ").append(p.score).append("\t");
 	}
 	
 	return sb.toString();

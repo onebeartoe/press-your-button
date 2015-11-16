@@ -26,13 +26,11 @@ public abstract class BoardPanel
 	font = new Font(fontFamily, Font.PLAIN, 32);
     }
 
-    
     public void draw(Graphics2D g2d, Point location, Color foreground, int gamePanelWidth)
     {
 	g2d.setColor(backgroundColor);
         
 	g2d.fillRect(location.x, location.y, gamePanelWidth, gamePanelWidth);
-//        g2d.fillRect(location.x, location.y, PressYourButton.gamePanelWidth, PressYourButton.gamePanelWidth);
         
 	g2d.setColor(foreground);
 
