@@ -9,36 +9,39 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane layoutY="3.0" prefHeight="225.0" prefWidth="275.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.onebeartoe.games.press.your.button.fx.FXMLController">
-   <bottom>
-      <HBox alignment="CENTER" fillHeight="false" BorderPane.alignment="CENTER">
-         <children>
-                  <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#handleNewGameButton" text="New Game" />
-            <Button fx:id="nextPlayerButton" mnemonicParsing="false" text="Next Player" />
-         </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-      </HBox>
-   </bottom>
+<BorderPane layoutY="3.0" prefHeight="341.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.onebeartoe.games.press.your.button.fx.FXMLController">
+    
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <right>
-                    <Button fx:id="button" onAction="#handleButtonAction" text="Stop" BorderPane.alignment="CENTER" />
+            <Button fx:id="stopButton" alignment="CENTER" contentDisplay="CENTER" onAction="#handleStopButtonAction" text="Stop" textAlignment="CENTER" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="Arial" size="16.0" />
+               </font>
+            </Button>
          </right>
          <left>
             <VBox alignment="CENTER" BorderPane.alignment="CENTER">
                <children>
-                  <Label text="Label" />
-                  <Label text="Label" />
-                  <Label text="Label" />
+                  <Label fx:id="player1Label" text="Player 1: ">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font></Label>
+                  <Label fx:id="player2Label" text="Player 2: ">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font></Label>
+                  <Label fx:id="player3Label" text="Player 3: ">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font></Label>
                </children>
             </VBox>
          </left>
          <center>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <BorderPane BorderPane.alignment="CENTER">
                <center>
-                  <Label fx:id="playerLabel" prefHeight="49.0" prefWidth="111.0" text="Player 1" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                  <Label fx:id="currentPlayerLabel" prefHeight="49.0" prefWidth="111.0" text="Player 1" textAlignment="CENTER" BorderPane.alignment="CENTER">
                      <font>
                         <Font name="Arial" size="29.0" />
                      </font>
@@ -57,16 +60,31 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Label" />
-                        <Label text="Label" GridPane.columnIndex="1" />
-                        <Label text="Label" GridPane.columnIndex="2" />
-                        <Label text="Label" GridPane.columnIndex="3" />
-                        <Label text="Label" GridPane.columnIndex="4" />
+                        <Label fx:id="board11" alignment="CENTER" contentDisplay="CENTER" prefHeight="56.0" prefWidth="171.0" text="B11">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
+                        <Label fx:id="board12" alignment="CENTER" prefHeight="63.0" prefWidth="149.0" text="B12" GridPane.columnIndex="1">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
+                        <Label fx:id="board13" alignment="CENTER" prefHeight="91.0" prefWidth="162.0" text="B13" GridPane.columnIndex="2">
+                           <font>
+                              <Font size="36.0" />
+                           </font></Label>
+                        <Label fx:id="board14" prefHeight="59.0" prefWidth="133.0" text="B14" GridPane.columnIndex="3">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
+                        <Label fx:id="board15" prefHeight="49.0" prefWidth="101.0" text="B15" GridPane.columnIndex="4">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
                      </children>
                   </GridPane>
                </bottom>
                <top>
-                  <GridPane BorderPane.alignment="CENTER">
+                  <GridPane prefHeight="48.0" prefWidth="430.0" BorderPane.alignment="CENTER">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -78,16 +96,112 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label fx:id="board00" text="Label" />
-                        <Label fx:id="board01" text="Label" GridPane.columnIndex="1" />
-                        <Label fx:id="board02" text="Label" GridPane.columnIndex="2" />
-                        <Label fx:id="board03" text="Label" GridPane.columnIndex="3" />
-                        <Label fx:id="board04" text="Label" GridPane.columnIndex="4" />
+                        <Label fx:id="board00" alignment="CENTER" prefHeight="51.0" prefWidth="76.0" text="B00">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
+                        <Label fx:id="board01" alignment="CENTER" prefHeight="59.0" prefWidth="86.0" text="B01" textAlignment="CENTER" GridPane.columnIndex="1">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
+                        <Label fx:id="board02" alignment="CENTER" prefHeight="57.0" prefWidth="109.0" text="B02" textAlignment="CENTER" GridPane.columnIndex="2">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
+                        <Label fx:id="board03" alignment="CENTER" prefHeight="52.0" prefWidth="75.0" text="B03" textAlignment="CENTER" GridPane.columnIndex="3">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
+                        <Label fx:id="board04" alignment="CENTER" prefHeight="51.0" prefWidth="76.0" text="B04" textAlignment="CENTER" GridPane.columnIndex="4">
+                           <font>
+                              <Font size="36.0" />
+                           </font></Label>
                      </children>
                   </GridPane>
                </top>
+               <left>
+                  <GridPane prefHeight="218.0" prefWidth="76.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label fx:id="board05" alignment="CENTER" prefHeight="85.0" prefWidth="122.0" text="B05">
+                           <font>
+                              <Font size="36.0" />
+                           </font></Label>
+                        <Label fx:id="board07" alignment="CENTER" prefHeight="106.0" prefWidth="114.0" text="B07" textAlignment="CENTER" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
+                        <Label fx:id="board09" alignment="CENTER" contentDisplay="CENTER" prefHeight="94.0" prefWidth="100.0" text="B09" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
+                     </children>
+                  </GridPane>
+               </left>
+               <right>
+                  <GridPane alignment="CENTER_RIGHT" prefHeight="218.0" prefWidth="75.0" BorderPane.alignment="CENTER_RIGHT">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <center>
+                              <Label fx:id="board06" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="B06" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font size="35.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                        </BorderPane>
+                        <Label fx:id="board08" alignment="CENTER" prefHeight="81.0" prefWidth="110.0" text="B08" textAlignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
+                        <Label fx:id="board10" alignment="CENTER" prefHeight="74.0" prefWidth="104.0" text="B10" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="35.0" />
+                           </font></Label>
+                     </children>
+                  </GridPane>
+               </right>
             </BorderPane>
          </center>
       </BorderPane>
    </center>
-      </BorderPane>
+   
+   <bottom>
+      <HBox alignment="CENTER" fillHeight="false" prefHeight="45.0" prefWidth="520.0" BorderPane.alignment="CENTER">
+         <children>                  
+            <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#handleNewGameButton" text="New Game">
+               <font>
+                  <Font name="Arial" size="16.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </Button>
+            
+            <Button fx:id="nextPlayerButton" mnemonicParsing="false" onAction="#handleNextPlayerButtonAction" text="Next Player">
+               <font>
+                  <Font name="Arial" size="16.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </bottom>   
+</BorderPane>

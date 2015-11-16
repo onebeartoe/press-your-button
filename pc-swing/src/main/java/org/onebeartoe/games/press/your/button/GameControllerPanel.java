@@ -28,7 +28,6 @@ public class GameControllerPanel extends JPanel
     
     private Logger logger;
 
-//    public GameControllerPanel(final PressYourButtonGame app, PreviewPanel gameBoardPanel, PreviewPanel scoreBoardPanel)
     public GameControllerPanel(final PressYourButtonGamePanel app, PreviewPanel gameBoardPanel, PreviewPanel scoreBoardPanel, PressYourButtonGame game)
     {
 	this.app = app;
@@ -157,7 +156,7 @@ public class GameControllerPanel extends JPanel
             }
             
             System.out.println("in next listener, game state is " + game.gameState);
-	}	
+	}
     }
     
     private class StopButtonListener implements ActionListener
@@ -171,7 +170,7 @@ public class GameControllerPanel extends JPanel
 	    }
             else
             {
-                System.out.println("not gonna stp player turn because we are in state: " + game.gameState);
+                System.out.println("Not gonna stop the current player's turn because we are in state: " + game.gameState);
             }
 	}
     }

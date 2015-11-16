@@ -1,8 +1,6 @@
 
 package org.onebeartoe.games.press.your.button.fx;
 
-//import java.awt.Color;
-import java.awt.Point;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -37,16 +36,28 @@ import javafx.util.Callback;
 
 import org.onebeartoe.games.press.your.button.EndCurrentPlayersTurnResponses;
 import org.onebeartoe.games.press.your.button.GameStates;
+import org.onebeartoe.games.press.your.button.NextPlayerResponses;
+import static org.onebeartoe.games.press.your.button.NextPlayerResponses.CURRENT_PLAYER_CANNOT_BE_SKIPPED_TRY_NEW_GAME;
+import static org.onebeartoe.games.press.your.button.NextPlayerResponses.GAME_IS_OVER_CLICK_NEW_GAME_BUTTON;
+import static org.onebeartoe.games.press.your.button.NextPlayerResponses.NEXT_PLAYERS_TURN;
 import org.onebeartoe.games.press.your.button.Player;
 import org.onebeartoe.games.press.your.button.PressYourButtonConstants;
 import org.onebeartoe.games.press.your.button.PressYourButtonGame;
 import org.onebeartoe.games.press.your.button.board.BoardPanel;
-import org.onebeartoe.games.press.your.button.board.PlayerLabelPanel;
 
 public class FXMLController implements Initializable 
 {
     @FXML
-    private Label playerLabel;
+    private Label currentPlayerLabel;
+    
+    @FXML
+    private Label player1Label;
+    
+    @FXML
+    private Label player2Label;
+    
+    @FXML
+    private Label player3Label;
     
     @FXML
     private Label board00;
@@ -58,12 +69,33 @@ public class FXMLController implements Initializable
     private Label board03;
     @FXML
     private Label board04;
+    @FXML
+    private Label board05;
+    @FXML
+    private Label board06;
+    @FXML
+    private Label board07;
+    @FXML
+    private Label board08;
+    @FXML
+    private Label board09;
+    @FXML
+    private Label board10;
+    @FXML
+    private Label board11;
+    @FXML
+    private Label board12;
+    @FXML
+    private Label board13;
+    @FXML
+    private Label board14;
+    @FXML
+    private Label board15;
     
     private List<Label> boards;
     
-    private TimerTask clickTask;
-    
-//TODO: don't forget to canel this when tapp exists    
+    private TimerTask animationTask;
+
     private Timer timer;
     
     volatile public PressYourButtonGame game;
@@ -76,8 +108,6 @@ public class FXMLController implements Initializable
     
     private void createNewGame()
     {
-        
-
         PartialGame partialGame = partialGame(playerCountDropdown, targetScoreDropdown);
         Integer count = partialGame.numberOfPlayers;
 	Integer targetScore = partialGame.targetScore;
@@ -99,8 +129,13 @@ public class FXMLController implements Initializable
     }
 
     public void endCurrentPlayersTurn()
-    {
+    {        
         EndCurrentPlayersTurnResponses response = game.endCurrentPlayersTurn();
+
+        if(animationTask != null)
+        {
+            animationTask.cancel();
+        }
         
         // update score board
         updateScoreBoard();        
@@ -109,14 +144,10 @@ public class FXMLController implements Initializable
         {
             case END_OF_GAME:
             {
+                String title = "Winner";
                 String message = "Player " + (game.currentPlayer + 1) + " is the winner of this game!";
                 
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Winner");
-                alert.setHeaderText("Information Alert");
-                alert.setContentText(message);
-
-                alert.show();
+                informationalAlert(title, message);
                 
                 break;
             }
@@ -132,10 +163,63 @@ public class FXMLController implements Initializable
     }
     
     @FXML
-    private void handleButtonAction(ActionEvent event) 
+    private void handleNextPlayerButtonAction(ActionEvent event)
     {
-        System.out.println("You clicked me!");
-        playerLabel.setText("Hello World!");
+        NextPlayerResponses commandRespnse = game.nextPlayer();
+        
+        String title = "Next Player";
+
+        switch(commandRespnse)
+        {
+            case GAME_IS_OVER_CLICK_NEW_GAME_BUTTON:
+            {
+                String message = "This game is over, please click the 'New Game' button.";
+                informationalAlert(title, message);
+
+                break;
+            }
+            case CURRENT_PLAYER_CANNOT_BE_SKIPPED_TRY_NEW_GAME:
+            {
+                String message = "The current player cannot be skipped.  Try the 'New Game' button, if you are done with is game.";
+                informationalAlert(title, message);
+
+                break;
+            }
+            case NEXT_PLAYERS_TURN:
+            {
+                String label = "Player " + (game.currentPlayer + 1);
+                currentPlayerLabel.setText(label);
+                        
+                startAnimation();
+                System.out.println("it is the next player's turn");
+
+                break;
+            }
+            default:
+            {
+                String message = "unknown enum: " + commandRespnse;
+                logger.log(Level.SEVERE, message);
+            }
+        }
+
+        System.out.println("in next listener, game state is " + game.gameState);
+    }
+    
+    @FXML
+    private void handleStopButtonAction(ActionEvent event) 
+    {
+        System.out.println("Stop button pressed");
+        
+        if(game.gameState == GameStates.PLAYERS_TURN)
+        {
+            System.out.println("ending the curent players turn");
+            
+            endCurrentPlayersTurn();
+        }
+        else
+        {
+            System.out.println("Not gonna stop the current player's turn because we are in state: " + game.gameState);
+        }
     }
     
     @FXML
@@ -161,6 +245,16 @@ public class FXMLController implements Initializable
         }
     }
 
+    private void informationalAlert(String title, String message)
+    {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText("Information Alert");
+        alert.setContentText(message);
+
+        alert.show();
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) 
     {
@@ -178,7 +272,6 @@ public class FXMLController implements Initializable
         targetScoreDropdown.getSelectionModel().selectFirst();
         
         timer = new Timer();
-//        timer.setDelay(PressYourButtonConstants.BOARD_REFRESH_DELAY);
         
         boards = new ArrayList();
         
@@ -187,6 +280,17 @@ public class FXMLController implements Initializable
         boards.add(board02);
         boards.add(board03);
         boards.add(board04);
+        boards.add(board05);
+        boards.add(board06);
+        boards.add(board07);
+        boards.add(board08);
+        boards.add(board09);
+        boards.add(board10);
+        boards.add(board11);
+        boards.add(board12);
+        boards.add(board13);
+        boards.add(board14);
+        boards.add(board15);
     }
 
     private PartialGame partialGame(ChoiceBox playerCountDropdown, ChoiceBox targetScoreDropdown)
@@ -214,11 +318,8 @@ public class FXMLController implements Initializable
         dialog.setResizable(true);
 
         // Widgets
-        Label label1 = new Label("Name: ");
-        Label label2 = new Label("Phone: ");
-//        final TextField text1 = new TextField();
-        
-//        final TextField text2 = new TextField();
+        Label label1 = new Label("Number of Players: ");
+        Label label2 = new Label("Target Score: ");
 
         // Create layout and add to dialog
         GridPane grid = new GridPane();
@@ -229,7 +330,6 @@ public class FXMLController implements Initializable
         grid.add(label1, 1, 1); // col=1, row=1
         
         grid.add(playerCountDropdown, 2, 1);
-//        grid.add(text1, 2, 1);
         
         grid.add(label2, 1, 2); // col=1, row=2
         grid.add(targetScoreDropdown, 2, 2);
@@ -256,7 +356,6 @@ public class FXMLController implements Initializable
             }
         });
 
-        // Show dialog
         Optional<PartialGame> result = dialog.showAndWait();
 
         if (result.isPresent()) 
@@ -266,22 +365,24 @@ public class FXMLController implements Initializable
             
             createNewGame();
             
-            startGame();
+            startAnimation();
         }        
     }
     
-    private void startGame()
+    private void startAnimation()
     {        
         Date firstTime = new Date();
-        clickTask = new AnimationTask();
+        animationTask = new AnimationTask();
 
         // this is the value of the delay in milliseconds between each board refresh
         final long period = 1000;
         
-        timer.schedule(clickTask, firstTime, period);
+        timer.schedule(animationTask, firstTime, period);
     }
     
-//TODO: call this from the overriden stop() method in teh MainApp class.    
+    /**
+     * This method is called to clean up any threads spawned by the application.
+     */
     public void stopThreads()
     {
         timer.cancel();
@@ -289,7 +390,33 @@ public class FXMLController implements Initializable
     
     private void updateScoreBoard()
     {
-//TODO: acutally update the score board
+        int size = game.players.size();
+                
+        if(size > 0)
+        {
+            String text = "Player 1: " + game.players.get(0).score;
+            player1Label.setText(text);
+        }
+        
+        if(size > 1)
+        {
+            String text = "Player 2: " + game.players.get(1).score;
+            player2Label.setText(text);
+        }
+        else
+        {
+            player2Label.setText("");
+        }
+        
+        if(size > 2)
+        {
+            String text = "Player 3: " + game.players.get(2).score;
+            player3Label.setText(text);
+        }
+        else
+        {
+            player3Label.setText("");
+        }
     }
     
     /**
@@ -324,11 +451,11 @@ public class FXMLController implements Initializable
 
             int i = 0;
 
-            for (Label location : boards) 
+            for (final Label location : boards) 
             {
-                BoardPanel panel = game.getBoardPanels().get(i);
+                final BoardPanel panel = game.getBoardPanels().get(i);
 
-                Paint foreground;
+                final Paint foreground;
 
                 if (i == currentPanelIndex) 
                 {
@@ -339,23 +466,24 @@ public class FXMLController implements Initializable
                     foreground = Color.WHITE;
                 }
 
-                location.setText(panel.getLabel());
-                location.setTextFill(foreground);
-                
-                java.awt.Color awtColor = panel.getBackgroundColor();
-                Color backgroundColor = convert(awtColor);
-                Background background = new Background(new BackgroundFill(backgroundColor, CornerRadii.EMPTY, Insets.EMPTY));
-                location.setBackground(background);
+                Platform.runLater(new Runnable() 
+                {
+                    @Override
+                    public void run() 
+                    {
+                        location.setText(panel.getLabel());
+                        location.setTextFill(foreground);
+
+                        java.awt.Color awtColor = panel.getBackgroundColor();
+                        Color backgroundColor = convert(awtColor);
+                        Background background = new Background(new BackgroundFill(backgroundColor, CornerRadii.EMPTY, Insets.EMPTY));
+                        location.setBackground(background);                        
+                    }
+                });
+
 
                 i++;
             }
-
-            
-//TODO: IMPLEMENT DRAWING THE PLAYER LABEL IN THE CENTER            
-            String label = "P" + (game.currentPlayer + 1);
-            BoardPanel playerLabel = new PlayerLabelPanel(label);
-//            playerLabel.draw(g2d, labelLocation, Color.RED, gamePanelWidth);
-
         }
     }    
     

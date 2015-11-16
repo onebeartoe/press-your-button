@@ -189,7 +189,8 @@ public class PressYourButtonGamePanel extends SingleThreadedGamePanel
 
         int verticalGap = 40;
         int i = 0;
-        for (Player p : game.players) {
+        for (Player p : game.players) 
+        {
             String s = "P" + (i + 1) + " " + p.score;
             int x = 5;
             int y = 30 + i * verticalGap;
