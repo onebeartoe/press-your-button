@@ -1,5 +1,15 @@
-
+    
 package org.onebeartoe.games.press.your.button.fx;
+
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalInput;
+import com.pi4j.io.gpio.Pin;
+import com.pi4j.io.gpio.PinPullResistance;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
+import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -106,13 +116,14 @@ public class FXMLController implements Initializable
     
     private Logger logger;
     
+    private GpioController gpio;
+    
     private void createNewGame()
     {
         PartialGame partialGame = partialGame(playerCountDropdown, targetScoreDropdown);
         Integer count = partialGame.numberOfPlayers;
 	Integer targetScore = partialGame.targetScore;
 
-	
 	List<Player> players = new ArrayList();
 	
 	for(int p=0; p<count; p++)
@@ -120,12 +131,17 @@ public class FXMLController implements Initializable
 	    Player player = new Player();
 	    players.add(player);
 	}
+
         
         game.createNewGame(players, targetScore);
+        System.out.println("in conroller - game - created new game (1)");
+        
         
         endCurrentPlayersTurn();
+        System.out.println("in conroller - eneded current player's turn");
         
         game.createNewGame(players, targetScore);
+        System.out.println("in conroller - game - created new game (2)");
     }
 
     public void endCurrentPlayersTurn()
@@ -161,6 +177,8 @@ public class FXMLController implements Initializable
         String message = "current player: " + game.currentPlayer + " - score: " + game.players.get(game.currentPlayer).score;
         System.out.println(message);
     }
+
+
     
     @FXML
     private void handleNextPlayerButtonAction(ActionEvent event)
@@ -272,7 +290,14 @@ public class FXMLController implements Initializable
         targetScoreDropdown.getSelectionModel().selectFirst();
         
         timer = new Timer();
+                
+        initializeBoardPanels();
         
+        initializeGpioButton();
+    }
+
+    private void initializeBoardPanels()
+    {
         boards = new ArrayList();
         
         boards.add(board00);
@@ -291,8 +316,57 @@ public class FXMLController implements Initializable
         boards.add(board13);
         boards.add(board14);
         boards.add(board15);
+
+        // can we use Streams here (not forEach() )?
+        for(Label l : boards)
+        {
+            l.setText("");
+        }
+//        boards = boards.stream()
+//                        .map( Label::setText("") )
+//                        .collect( Collectors.toList() );
     }
 
+    /**
+     * Wiring: 
+     * The arcade button (https://www.adafruit.com/products/1194)
+     * used in this project is from Adafruit.
+     *       Wiring the button for input into the Raspberry Pi is as follows:
+     *
+     *       The two connections on either of the long sides are for powering the 
+     *       built-in LED.
+     *
+     *       The connection on the bottom is wired to Ground on the Raspberry Pi.
+     *
+     *       The button connection that sticks out of the housing, in the same direction 
+     *       as the Ground connection, is connected to 
+     */
+    private void initializeGpioButton()
+    {
+        try
+        {
+            System.out.println("*Provisioning GPIO.");
+            gpio = GpioFactory.getInstance();
+
+            // This is pin 13 on the Raspberry Pi model B, revision 2 pin header.
+            // It is also labeld #21 by the Raspberry Pi foundation.
+            Pin buttonPin = RaspiPin.GPIO_02;
+
+            GpioPinDigitalInput stopButton = gpio.provisionDigitalInputPin(buttonPin, 
+                                                                             "press your button", 
+                                                                             PinPullResistance.PULL_UP);   // works with the Adafruit massive arcade button
+    //                                                                           PinPullResistance.PULL_DOWN); // works with a tactile/simple push button
+
+            System.out.println("*GPIO provisioned :)");
+            GpioHandler gpioHandler = new GpioHandler();
+            stopButton.addListener(gpioHandler);            
+        }
+        catch(IllegalArgumentException | UnsatisfiedLinkError e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
     private PartialGame partialGame(ChoiceBox playerCountDropdown, ChoiceBox targetScoreDropdown)
     {
         String nop = playerCountDropdown.getSelectionModel().getSelectedItem().toString();
@@ -360,12 +434,14 @@ public class FXMLController implements Initializable
 
         if (result.isPresent()) 
         {
-            System.out.println("Staring new game");
-            PartialGame game = result.get();
+            System.out.println("in conroller - Staring new game");
+//            PartialGame game = result.get();
             
             createNewGame();
+            System.out.println("in conroller - Created new game");
             
             startAnimation();
+            System.out.println("in controller - Animation started");
         }        
     }
     
@@ -381,11 +457,21 @@ public class FXMLController implements Initializable
     }
     
     /**
-     * This method is called to clean up any threads spawned by the application.
+     * This method is called to clean up any threads spawned by the application, 
+     * as well as shutdown the GPIO interface.
      */
     public void stopThreads()
     {
         timer.cancel();
+
+        if(gpio == null)
+        {
+            System.err.println("the GPIO interface was not initialized on app exit");
+        }
+        else
+        {
+            gpio.shutdown();
+        }
     }
     
     private void updateScoreBoard()
@@ -487,6 +573,34 @@ public class FXMLController implements Initializable
         }
     }    
     
+    private class GpioHandler implements GpioPinListenerDigital
+    {
+        @Override
+        public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) 
+        {
+            PinState state = event.getState();
+            if(state == PinState.LOW)
+            {
+                System.out.println("stop button pin state changed to LOW.");
+         
+                ActionEvent ae = null;
+                
+                Platform.runLater(new Runnable() 
+                {
+                    @Override
+                    public void run() 
+                    {
+                        handleStopButtonAction(ae);
+                    }
+                });
+            }
+            else
+            {
+                System.out.println("stop button pin state changed to HIGH.");
+            }
+        }    
+    }
+
     private class PartialGame
     {
         public  int numberOfPlayers;

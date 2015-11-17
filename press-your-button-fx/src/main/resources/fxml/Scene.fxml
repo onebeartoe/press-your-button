@@ -41,7 +41,7 @@
          <center>
             <BorderPane BorderPane.alignment="CENTER">
                <center>
-                  <Label fx:id="currentPlayerLabel" prefHeight="49.0" prefWidth="111.0" text="Player 1" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                  <Label fx:id="currentPlayerLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="49.0" prefWidth="121.0" text="Player 1" textAlignment="CENTER" BorderPane.alignment="CENTER">
                      <font>
                         <Font name="Arial" size="29.0" />
                      </font>
