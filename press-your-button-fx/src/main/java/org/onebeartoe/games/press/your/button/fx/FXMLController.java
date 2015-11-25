@@ -178,8 +178,6 @@ public class FXMLController implements Initializable
         System.out.println(message);
     }
 
-
-    
     @FXML
     private void handleNextPlayerButtonAction(ActionEvent event)
     {
@@ -339,7 +337,9 @@ public class FXMLController implements Initializable
      *       The connection on the bottom is wired to Ground on the Raspberry Pi.
      *
      *       The button connection that sticks out of the housing, in the same direction 
-     *       as the Ground connection, is connected to 
+     *       as the Ground connection, is connected to pin 13, on the Raspberry Pi 
+     *       model B Revision 2, pin header.  It is also labeld #21 by the 
+     *       Raspberry Pi foundation.
      */
     private void initializeGpioButton()
     {
