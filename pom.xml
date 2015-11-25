@@ -15,7 +15,7 @@
     <modules>
         <module>pc-swing</module>
         <module>press-your-button-fx</module>
-        <module>model/press-your-button-model</module>
+        <module>press-your-button-model</module>
         <module>press-your-button-service</module>
     </modules>
 
