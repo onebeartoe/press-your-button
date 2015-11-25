@@ -338,7 +338,7 @@ public class FXMLController implements Initializable
      *
      *       The button connection that sticks out of the housing, in the same direction 
      *       as the Ground connection, is connected to pin 13, on the Raspberry Pi 
-     *       model B Revision 2, pin header.  It is also labeld #21 by the 
+     *       model B Revision 2, pin header.  It is also labeled #21 by the 
      *       Raspberry Pi foundation.
      */
     private void initializeGpioButton()
