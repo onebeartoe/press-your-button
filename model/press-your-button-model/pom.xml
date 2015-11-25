@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
-        <groupId>org.onebeartoe.games</groupId>
-        <artifactId>onebeartoe-press-your-luck</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
+	<groupId>org.onebeartoe.games</groupId>
+	<artifactId>onebeartoe-press-your-luck</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+    </parent>    
     
     <groupId>org.onebeartoe.games</groupId>
     <artifactId>press-your-button-model</artifactId>
