@@ -17,12 +17,12 @@ public class PressYourButtonGame
 {
     public final static int BOARD_PANEL_COUNT = 16;
     
-    public volatile GameStates gameState = GameStates.NEW_GAME_CONFIG;
+    public GameStates gameState = GameStates.NEW_GAME_CONFIG;
 
 // TODO: MAKE THESE instance members NOT VISIBLE outside of the CLASS!            
     public List<Player> players;
     
-    public volatile int currentPlayer;
+    public int currentPlayer;
     
 // TODO: MAKE THESE instance members NOT VISIBLE outside of the CLASS!                
     public int targetScore;
