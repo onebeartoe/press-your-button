@@ -44,14 +44,17 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.onebeartoe.games.press.your.button.plugins.PluginConfigEntry;
-import org.onebeartoe.games.press.your.button.preferences.GamePreferencesKeys;
+
 
 import org.onebeartoe.games.press.your.button.preferences.SwingPreferencesService;
 
-import org.onebeartoe.games.press.your.button.swing.GamePanel;
-import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
 
-public class App extends WindowAdapter
+
+
+import org.onebeartoe.games.press.your.button.plugins.swing.GamePanel;
+import org.onebeartoe.games.press.your.button.tabs.PressYourButtonGamePanel;
+
+public class PressYourButtonSwingApp extends WindowAdapter
 {
     private final Logger logger;
     
@@ -65,19 +68,29 @@ public class App extends WindowAdapter
     
     private JTabbedPane tabbedPane;
 
+
+
+    
+
     private JLabel statusLabel;
     
     public static final int DEFAULT_HEIGHT = 600;
     
     public static final int DEFAULT_WIDTH = 450;
     
-    public App()
+    public PressYourButtonSwingApp()
     {
+
         Class clazz = getClass();
 	String className = clazz.getName();
 	logger = Logger.getLogger(className);
 
 	preferenceService = new SwingPreferencesService();
+
+	
+	
+
+
 
         userPluginConfiguration = new ArrayList();
            
@@ -95,7 +108,7 @@ public class App extends WindowAdapter
 	String path2 = "/icons/tabs/game.png";
 	URL url2 = getClass().getResource(path2);
 	ImageIcon animationsTabIcon = new ImageIcon(url2);
-	final GamePanel animationsPanel = new PressYourButton();
+	final GamePanel animationsPanel = new PressYourButtonGamePanel();
 	
 	frame = new JFrame("Press Your Butotn");
 	
@@ -170,13 +183,12 @@ public class App extends WindowAdapter
 	String userIconPath = "/tab_icons/my_small.png";
 	URL userUrl = getClass().getResource(userIconPath);
 	ImageIcon userTabIcon = new ImageIcon(userUrl);	
-	String key = GamePreferencesKeys.userImagesDirectory;	
 
 	// animations tab
 	String path2 = "/tab_icons/ship_small.png";
 	URL url2 = getClass().getResource(path2);
 	ImageIcon animationsTabIcon = new ImageIcon(url2);
-	final GamePanel animationsPanel = new PressYourButton();
+	final GamePanel animationsPanel = new PressYourButtonGamePanel();
 	
 	frame = new JFrame("Press Your Button");
 	
@@ -213,9 +225,7 @@ public class App extends WindowAdapter
 	{
 	    logger.log(Level.INFO, ex.getMessage(), ex);
 	}
-        
-        
-	
+
 	frame.addWindowListener(this);
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 	frame.setLayout( new BorderLayout() );
@@ -313,7 +323,7 @@ public class App extends WindowAdapter
     
     public static void main(String[] args) throws Exception 
     {		
-	App app = new App();
+	PressYourButtonSwingApp app = new PressYourButtonSwingApp();
     }
     
     private void savePreferences()
@@ -421,14 +431,13 @@ public class App extends WindowAdapter
 	    }
 	    dotCount++;
 
-	    App.this.statusLabel.setText( label.toString() );
+	    PressYourButtonSwingApp.this.statusLabel.setText( label.toString() );
 	    
 	    Date d = new Date();
 	    long now = d.getTime();
 	    if(now > periodEnd)
 	    {
 		searchTimer.stop();
-		
 	    }
 	}
     }

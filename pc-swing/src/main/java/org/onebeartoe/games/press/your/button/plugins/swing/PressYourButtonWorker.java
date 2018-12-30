@@ -3,18 +3,27 @@ package org.onebeartoe.games.press.your.button.plugins.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
+import static org.onebeartoe.games.press.your.button.GameStates.END_OF_GAME;
+import static org.onebeartoe.games.press.your.button.GameStates.END_OF_TURN;
+import static org.onebeartoe.games.press.your.button.GameStates.PLAYERS_TURN;
+import static org.onebeartoe.games.press.your.button.GameStates.SHOW_SCORE;
+import org.onebeartoe.games.press.your.button.PressYourButtonGame;
+import org.onebeartoe.games.press.your.button.tabs.PressYourButtonGamePanel;
 
 /**
  * @author rmarquez
  */
 public class PressYourButtonWorker implements ActionListener 
 {
-    private final PressYourButton plugin;
+    private PressYourButtonGamePanel app;
+    
+    private volatile PressYourButtonGame game;
 
-    public PressYourButtonWorker(final PressYourButton plugin) 
+    public PressYourButtonWorker(final PressYourButtonGamePanel plugin, PressYourButtonGame game) 
     {
-	this.plugin = plugin;
+	this.app = plugin;
+        
+        this.game = game;
     }
 
     /**
@@ -28,33 +37,34 @@ public class PressYourButtonWorker implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e) 
     {
-	switch (plugin.gameState) 
+        System.out.println("in PressYourButtonWorker#ActionPerformed: " + game.gameState);
+        
+	switch (game.gameState) 
 	{
 	    case PLAYERS_TURN:
 	    {
-		plugin.drawBoardForPlayersTurn();
+		app.drawBoardForPlayersTurn();
 		break;
 	    }
 	    case END_OF_GAME:
 	    {
-		plugin.endOfGame();
+		app.endOfGame();
 		break;
 	    }
 	    case END_OF_TURN:
 	    {
-		plugin.endOfTurn();
+		app.endOfTurn();
 		break;
 	    }
 	    case SHOW_SCORE:
 	    {
-		plugin.drawScoreBoardOnPanel();
+		app.drawScoreBoardOnPanel();
 		break;
 	    }
 	    default:
 	    {
-		plugin.newGameConfiguration();
+		app.newGameConfiguration();
 	    }
 	}
-    }
-    
+    }   
 }

@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
-import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
+import org.onebeartoe.games.press.your.button.tabs.PressYourButtonGamePanel;
 
 /**
  * @author rmarquez
@@ -26,11 +26,15 @@ public class GameCreationPanel extends JPanel implements ActionListener
     
     private JButton startButton;
     
-    private PressYourButton plugin;
+    private PressYourButtonGamePanel app;
     
-    public GameCreationPanel(PressYourButton parent)
+    private PressYourButtonGame game;
+    
+    public GameCreationPanel(PressYourButtonGamePanel parent, PressYourButtonGame game)
     {
-	this.plugin = parent;
+	this.app = parent;
+        
+        this.game = game;
 	
 	Integer [] values = {1,2,3};
 	playerCountDropdown = new JComboBox(values);
@@ -57,24 +61,20 @@ public class GameCreationPanel extends JPanel implements ActionListener
 
     public void actionPerformed(ActionEvent e) 
     {
-	plugin.invalidate();
-	plugin.updateUI();
+	app.invalidate();
+	app.updateUI();
 	    
-	Game game = createNewGame();
+	createNewGame();
 	
-	plugin.currentGame = game;
+	app.game = game;
 	
-	plugin.remove(plugin.newGamePanel);
-	plugin.add(plugin.endOfTurnPanel, BorderLayout.CENTER);
+	app.remove(app.newGamePanel);
+	app.add(app.endOfTurnPanel, BorderLayout.CENTER);
 	
-	plugin.newGame();
-	
-	plugin.gameState = GameStates.PLAYERS_TURN;
-	
-	plugin.boardSound.loop();
+        app.startGame();
     }
     
-    public Game createNewGame()
+    public void createNewGame()
     {
 	Integer count = (Integer) playerCountDropdown.getSelectedItem();
 	Integer targetScore = (Integer) targetScoreDropdown.getSelectedItem();
@@ -86,12 +86,7 @@ public class GameCreationPanel extends JPanel implements ActionListener
 	    Player player = new Player();
 	    players.add(player);
 	}
-	
-	Game game = new Game();
-	game.players = players;
-	game.targetScore = targetScore;
-	
-	return game;
-    }
-    
+
+        game.createNewGame(players, targetScore);
+    }   
 }
