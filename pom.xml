@@ -10,7 +10,7 @@
 
     <packaging>pom</packaging>
 
-    <name>onebeartoe-press-your-button-parent</name>
+    <name>onebeartoe-press-your-button</name>
 
     <modules>
         <module>pc-swing</module>
