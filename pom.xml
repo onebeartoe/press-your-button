@@ -25,6 +25,19 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
  
+    <repositories>
+        <repository>
+            <id>onebeartoe repo</id>
+            <name>onebeartoe Maven Repository</name>
+            <url>http://onebeartoe.org/maven/2/repository/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </repository>
+    </repositories>
+ 
     <build>
         <!-- To define the plugin version in your parent POM -->
         <pluginManagement>
