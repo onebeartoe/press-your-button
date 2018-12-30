@@ -17,23 +17,16 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -49,19 +42,20 @@ import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import org.onebeartoe.games.press.your.button.plugins.PluginConfigEntry;
 import org.onebeartoe.games.press.your.button.preferences.GamePreferencesKeys;
-import org.onebeartoe.games.press.your.button.preferences.JavaPreferencesService;
-import org.onebeartoe.games.press.your.button.preferences.PreferencesService;
+
+import org.onebeartoe.games.press.your.button.preferences.SwingPreferencesService;
+
 import org.onebeartoe.games.press.your.button.swing.GamePanel;
 import org.onebeartoe.games.press.your.button.tabs.PressYourButton;
 
-public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdapter
-{    
-    
+public class App extends WindowAdapter
+{
     private final Logger logger;
     
-    private PreferencesService preferenceService;
+    private SwingPreferencesService preferenceService;
     
     private Timer searchTimer;
    
@@ -70,9 +64,7 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
     private JFrame frame;
     
     private JTabbedPane tabbedPane;
-    
-//    private JFileChooser pluginChooser;
-    
+
     private JLabel statusLabel;
     
     public static final int DEFAULT_HEIGHT = 600;
@@ -81,13 +73,11 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
     
     public App()
     {
-	String className = App.class.getName();
+        Class clazz = getClass();
+	String className = clazz.getName();
 	logger = Logger.getLogger(className);
-	
-//	pluginChooser = new JFileChooser();
-//	pluginChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-	
-	preferenceService = new JavaPreferencesService();
+
+	preferenceService = new SwingPreferencesService();
 
         userPluginConfiguration = new ArrayList();
            
@@ -298,13 +288,12 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	return menuBar;
     }
     
-    private void displayPlugin(GamePanel panel)
-    {
-	ImageIcon icon = panel.getTabIcon();
-	String title = panel.getTabTitle();
-	tabbedPane.addTab(title, icon, panel, "A weather app for internal and external temps.");
-	
-    }
+//    private void displayPlugin(GamePanel panel)
+//    {
+//	ImageIcon icon = panel.getTabIcon();
+//	String title = panel.getTabTitle();
+//	tabbedPane.addTab(title, icon, panel, "A weather app for internal and external temps.");	
+//    }
     
     private void exit()
     {	
@@ -375,8 +364,8 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
     {
 	public void actionPerformed(ActionEvent e) 
 	{
-	    String path = "/images/";
-	    String iconPath = path + "aaagumball.png";
+	    String path = "/icons/tabs/";
+	    String iconPath = path + "game.png";
 	    URL resource = getClass().getResource(iconPath);
 	    ImageIcon imageIcon = new ImageIcon(resource);
 	    String message = "Game Instructions";
@@ -448,8 +437,6 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
     {
 	public void stateChanged(ChangeEvent e) 
 	{
-
-
 	    // start the selected panel/tab's activity
 	    Object o = e.getSource();
 	    JTabbedPane tabs = (JTabbedPane) o;
@@ -458,5 +445,4 @@ public class App extends WindowAdapter //extends IOIOSwingApp extends WindowAdap
 	    p.startTabActivity();
 	}
     }
-    
 }

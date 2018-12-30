@@ -119,15 +119,15 @@
 	</dependency>
 
 
-<!-- 
+
 
 	<dependency>
-	    <groupId>org.onebeartoe.pressyourluck.plugins</groupId>
-	    <artifactId>pressyourluck-plugin</artifactId>
-	    <version>0.1</version>
+            <groupId>org.onebeartoe</groupId>
+            <artifactId>onebeartoe-application</artifactId>
+            <version>1.0</version>
 	</dependency>                
 
-        -->        
+        
     </dependencies>
 
 </project>

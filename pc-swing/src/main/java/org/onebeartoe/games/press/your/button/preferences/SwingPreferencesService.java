@@ -7,34 +7,16 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import org.onebeartoe.games.press.your.button.plugins.PluginConfigEntry;
 import org.onebeartoe.games.press.your.button.swing.GamePanel;
 
 /**
- * @deprecated Use the version at https://github.com/onebeartoe/java-libraries/tree/master/onebeartoe-application/src/main/java/org/onebeartoe/application
  * @author Roberto Marquez
  */
-public class JavaPreferencesService implements PreferencesService
-{
-    
-//    private Preferences preferences;
-    
-    public JavaPreferencesService()
-    {
-//	preferences = Preferences.userNodeForPackage(App.class);
-    }
-
-    public String get(String key, String defaultValue) 
-    {	
-//	String value = preferences.get(key, defaultValue);
-	
-	return "";
-    }
-    
-    @Override
+public class SwingPreferencesService 
+{    
     public GamePanel loadPlugin(String jarPath, String className) throws Exception
     {	
         File jar = new File(jarPath);
@@ -60,24 +42,18 @@ public class JavaPreferencesService implements PreferencesService
 	return plugin;
     }
     
-    @Override
-    public List<GamePanel> restoreUserPluginPreferences(List<PluginConfigEntry> userPluginConfiguration) throws Exception 
-    {
-        List<GamePanel> plugins = new ArrayList();
-        
-
-        
-	return plugins;
-    }
+//    @Override
+//    public List<GamePanel> restoreUserPluginPreferences(List<PluginConfigEntry> userPluginConfiguration) throws Exception 
+//    {
+//        List<GamePanel> plugins = new ArrayList();
+//  	  return plugins;
+//    }
 	
     public Dimension restoreWindowDimension() 
     {	
-	
-	
 	return new Dimension(750, 850);
     }
-    
-    @Override
+
     public Point restoreWindowLocation() throws Exception
     {
 	
@@ -85,20 +61,14 @@ public class JavaPreferencesService implements PreferencesService
 	
 	return point;
     }
-    
-   
 
     public void saveUserPluginPreferences(List<PluginConfigEntry> userPluginConfigurations)
     {
         
     }
-    
-    @Override
+
     public void saveWindowPreferences(JFrame window)
     {
 	
-    }
-
-
-    
+    }   
 }
